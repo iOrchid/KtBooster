@@ -19,7 +19,7 @@ import androidx.lifecycle.Observer
  * ----------------------------------------------------------------
  * Fragment基类封装，包含必要的公用属性、扩展函数
  */
-abstract class BaseFragment : Fragment() {
+abstract class KtFragment : Fragment() {
 
 
     /**

@@ -19,8 +19,7 @@ import androidx.lifecycle.Observer
  * ----------------------------------------------------------------
  * 封装的Activity的基类，包含一些必要的公用属性或扩展函数
  */
-abstract class BaseActivity:AppCompatActivity() {
-
+abstract class KtActivity : AppCompatActivity() {
 
 
     /**
@@ -28,7 +27,7 @@ abstract class BaseActivity:AppCompatActivity() {
      * [block]liveData对象，响应change变化的逻辑块
      */
     protected fun <T : Any> LiveData<T>.observeKt(block: (T) -> Unit) {
-        this.observe(this@BaseActivity, Observer {
+        this.observe(this@KtActivity, Observer {
             block(it)
         })
     }
