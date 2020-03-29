@@ -49,6 +49,9 @@ dependencies {
     implementation(DepLibrary.CONSTRAINT_LAYOUT)
     implementation(DepLibrary.RECYCLER_VIEW)
 
+    //依赖core
+    api(project(":libcore"))
+
     //test dependencies，使用的是buildSrc下面的自定义扩展
     addTestDependencies()
 

@@ -21,7 +21,7 @@ const val buildTools = "29.0.3"
 const val minSdk = 21
 const val targetSdk = 29
 const val libCode = 1
-const val libVersion = "1.0.0"
+const val libVersion = "0.1.0-alpha01"
 
 //endregion
 
