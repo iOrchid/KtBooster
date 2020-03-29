@@ -59,7 +59,7 @@ dependencies {
     implementation(DepLibrary.NAVIGATION_FRAGMENT_KTX)
     implementation(DepLibrary.NAVIGATION_UI_KTX)
 //    implementation(project(mapOf("path" to ":booster")))
-    implementation("com.github.zhiwei1990:KtBooster:0.1.0-alpha01")
+    implementation("com.github.zhiwei1990:KtBooster:0.1.0-alpha02")
 
     //test dependencies，使用的是buildSrc下面的自定义扩展
     addTestDependencies()

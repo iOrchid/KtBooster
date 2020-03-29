@@ -6,9 +6,6 @@ plugins {
     id("androidx.navigation.safeargs.kotlin")//androidx navigation传参插件 也可以不带.kotlin（该插件引起一个变异warn getApplicationIdTextResource的api废弃问题）
     //2、发布到jitpack.io的步骤2,似乎所有依赖module都要配置
     id("com.github.dcendents.android-maven")
-    val group = "org.zhiwei"
-    val name = "booster"
-    val version = "0.1.0-alpha2"
 }
 
 android {
