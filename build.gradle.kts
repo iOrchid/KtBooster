@@ -4,6 +4,7 @@ buildscript {
     repositories {
         google()
         jcenter()
+        maven("https://jitpack.io")
     }
 
     dependencies {
@@ -21,6 +22,7 @@ allprojects {
     repositories {
         google()
         jcenter()
+        maven("https://jitpack.io")
     }
 
     tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {

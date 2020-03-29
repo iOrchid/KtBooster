@@ -4,9 +4,11 @@ plugins {
     kotlin("android.extensions")
     kotlin("kapt")//使用dataBinding或 kotlin的注解功能时候，就需要这个
     id("androidx.navigation.safeargs.kotlin")//androidx navigation传参插件 也可以不带.kotlin（该插件引起一个变异warn getApplicationIdTextResource的api废弃问题）
-    //2、发布到jitpack.io的步骤2
+    //2、发布到jitpack.io的步骤2,似乎所有依赖module都要配置
     id("com.github.dcendents.android-maven")
-    val group = "com.github.zhiwei1990"
+    val group = "org.zhiwei"
+    val name = "booster"
+    val version = "0.1.0-alpha2"
 }
 
 android {

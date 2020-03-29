@@ -2,6 +2,8 @@ plugins {
     id("com.android.library")
     kotlin("android")
     kotlin("android.extensions")
+    //2、发布到jitpack.io的步骤2,似乎所有依赖module都要配置
+    id("com.github.dcendents.android-maven")
 }
 
 android {

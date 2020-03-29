@@ -3,6 +3,8 @@ plugins {
     kotlin("android")//或者 id("kotlin-android")
     kotlin("android.extensions")
     kotlin("kapt")
+    //2、发布到jitpack.io的步骤2,似乎所有依赖module都要配置
+    id("com.github.dcendents.android-maven")
 }
 
 android {
