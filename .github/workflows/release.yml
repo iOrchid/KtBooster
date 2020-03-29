@@ -8,6 +8,6 @@ jobs:
       - name: Create a Release
         uses: elgohr/Github-Release-Action@master
         env:
-          GITHUB_TOKEN: ${{ secrets.ACTION_DEPLOY_KEY }}
+          GITHUB_TOKEN: ${{ secrets.publish_token }}
         with:
           args: MyReleaseMessage
