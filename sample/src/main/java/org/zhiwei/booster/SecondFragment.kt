@@ -11,7 +11,7 @@ import androidx.navigation.fragment.findNavController
 /**
  * A simple [Fragment] subclass as the second destination in the navigation.
  */
-class SecondFragment : BaseFragment() {
+class SecondFragment : KtFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

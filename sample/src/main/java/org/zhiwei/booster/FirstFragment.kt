@@ -7,12 +7,11 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import org.zhiwei.booster.R
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
  */
-class FirstFragment : BaseFragment() {
+class FirstFragment : KtFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
