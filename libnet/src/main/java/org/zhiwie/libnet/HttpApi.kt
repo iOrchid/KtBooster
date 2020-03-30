@@ -8,6 +8,7 @@ import com.google.gson.Gson
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
+import org.zhiwie.libnet.model.DataResult
 import java.io.IOException
 import java.util.concurrent.TimeUnit
 

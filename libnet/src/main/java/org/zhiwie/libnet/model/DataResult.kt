@@ -1,4 +1,4 @@
-package org.zhiwie.libnet
+package org.zhiwie.libnet.model
 
 /**
  * 作者： 志威  zhiwei.org
@@ -42,3 +42,33 @@ sealed class DataResult<out R> {
  */
 val DataResult<*>.succeeded
     get() = this is DataResult.Success && data != null
+
+
+//region Resource形式 数据封装
+
+//资源获取的状态，枚举
+enum class Status {
+    SUCCESS,
+    ERROR,
+    LOADING
+}
+
+/**
+ * 数据封装
+ */
+data class Resource<out T>(val status: Status, val data: T?, val message: String?) {
+    companion object {
+        fun <T> success(data: T?): Resource<T> {
+            return Resource(Status.SUCCESS, data, "Resource Success")
+        }
+
+        fun <T> error(msg: String, data: T?): Resource<T> {
+            return Resource(Status.ERROR, data, msg)
+        }
+
+        fun <T> loading(data: T?): Resource<T> {
+            return Resource(Status.LOADING, data, null)
+        }
+    }
+}
+//endregion
