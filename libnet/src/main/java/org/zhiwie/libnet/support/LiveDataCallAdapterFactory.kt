@@ -38,7 +38,7 @@ import java.lang.reflect.Type
  *
  * You never know what you can do until you try !
  * ----------------------------------------------------------------
- * 用于将retrofit的返回数据，转化为livedata的adapter的工厂类
+ * 用于将retrofit的返回数据，转化为liveData的adapter的工厂类
  */
 class LiveDataCallAdapterFactory : Factory() {
     override fun get(
