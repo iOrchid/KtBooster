@@ -33,34 +33,50 @@ fun String.showToast(context: Context, duration: Int = Toast.LENGTH_SHORT) {
 
 /**
  * String打印日志 Debug级别
- * [any] 当前打印日志的文件类，用作TAG，默认
+ * [tag] 当前打印日志的文件类，用作TAG，默认
  */
-fun String.logD(any: Any) {
-    Log.d(any.javaClass.simpleName, this)
+fun String.logD(tag: Any) {
+    if (tag is String) {
+        Log.d(tag, this)
+    } else {
+        Log.d(tag.javaClass.simpleName, this)
+    }
 }
 
 /**
  * String打印日志 Info级别
- * [any] 当前打印日志的文件类，用作TAG，默认
+ * [tag] 当前打印日志的文件类，用作TAG，默认
  */
-fun String.logI(any: Any) {
-    Log.i(any.javaClass.simpleName, this)
+fun String.logI(tag: Any) {
+    if (tag is String) {
+        Log.i(tag, this)
+    } else {
+        Log.i(tag.javaClass.simpleName, this)
+    }
 }
 
 /**
  * String打印日志 Warn级别
- * [any] 当前打印日志的文件类，用作TAG，默认
+ * [tag] 当前打印日志的文件类，用作TAG，默认
  */
-fun String.logW(any: Any) {
-    Log.w(any.javaClass.simpleName, this)
+fun String.logW(tag: Any) {
+    if (tag is String) {
+        Log.w(tag, this)
+    } else {
+        Log.w(tag.javaClass.simpleName, this)
+    }
 }
 
 /**
  * String打印日志 Error级别
- * [any] 当前打印日志的文件类，用作TAG，默认
+ * [tag] 当前打印日志的文件类，用作TAG，默认
  */
-fun String.logE(any: Any) {
-    Log.e(any.javaClass.simpleName, this)
+fun String.logE(tag: Any) {
+    if (tag is String) {
+        Log.e(tag, this)
+    } else {
+        Log.e(tag.javaClass.simpleName, this)
+    }
 }
 
 //endregion

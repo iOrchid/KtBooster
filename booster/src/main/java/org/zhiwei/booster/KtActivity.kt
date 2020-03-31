@@ -31,4 +31,5 @@ abstract class KtActivity : AppCompatActivity() {
             block(it)
         })
     }
+
 }
