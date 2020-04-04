@@ -34,6 +34,7 @@ abstract class NetworkBoundResource<ResultType, RequestType>
         result.value = Resource.loading(null)
         val dbSource = loadFromDb()
         result.addSource(dbSource) { data ->
+            //todo 关于这里 remove的原因，是因为mediatorLiveData的特性，避免dbSource的其他地方导致的变化，再次引起这下面步骤的重复
             result.removeSource(dbSource)
             if (shouldFetch(data)) {
                 fetchFromNetwork(dbSource)
