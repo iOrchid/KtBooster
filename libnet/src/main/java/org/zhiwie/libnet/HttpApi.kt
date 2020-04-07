@@ -8,7 +8,8 @@ import com.google.gson.Gson
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
-import org.zhiwie.libnet.model.DataResult
+import org.junit.experimental.theories.suppliers.TestedOn
+import org.zhiwie.libnet.config.KtHttpLogInterceptor
 import java.io.IOException
 import java.util.concurrent.TimeUnit
 
@@ -31,6 +32,9 @@ import java.util.concurrent.TimeUnit
  */
 object HttpApi {
 
+    private const val TAG = "HttpApi"
+
+
     //url的配置 以/结尾，erpath就不用/开始了
     private var baseUrl: String? = null
 
@@ -42,7 +46,7 @@ object HttpApi {
         .writeTimeout(10, TimeUnit.SECONDS)//向服务器写入数据的时长，默认10s
         .retryOnConnectionFailure(true)
         .cookieJar(CookieJar.NO_COOKIES)
-//            .addNetworkInterceptor()//添加网络拦截器，可以对okhttp的网络请求做拦截处理，不同于应用拦截器，这里能感知所有网络状态，比如重定向。
+        .addNetworkInterceptor(KtHttpLogInterceptor())//添加网络拦截器，可以对okhttp的网络请求做拦截处理，不同于应用拦截器，这里能感知所有网络状态，比如重定向。
         .build()
 
     //gson对象，免得每次都创建
@@ -67,8 +71,8 @@ object HttpApi {
      * get请求服务器数据,异步请求，接口回调形式
      * [data]为map形式的key -- value 请求参数，或者别的形式
      */
-    fun get(data: Map<String, String>?, @NonNull url: String, callback: IHttpCallback) {
-        val request = buildGetRequest(url, data)
+    fun get(data: Map<String, String>?, @NonNull path: String, callback: IHttpCallback) {
+        val request = buildGetRequest(path, data)
         okClient.newCall(request)
             .enqueue(callback(callback))
     }
@@ -77,8 +81,8 @@ object HttpApi {
      * get请求服务器数据,异步请求，liveData回调形式
      * [data]为map形式的key -- value 请求参数，或者别的形式
      */
-    fun get(data: Map<String, String>?, @NonNull url: String, liveData: MutableLiveData<String?>) {
-        val request = buildGetRequest(url, data)
+    fun get(data: Map<String, String>?, @NonNull path: String, liveData: MutableLiveData<String?>) {
+        val request = buildGetRequest(path, data)
 
         okClient.newCall(request)
             .enqueue(liveBack(liveData))
@@ -88,8 +92,8 @@ object HttpApi {
      * get请求服务器数据,异步请求，lambda回调形式
      * [data]为map形式的key -- value 请求参数，或者别的形式
      */
-    fun get(data: Map<String, String>?, @NonNull url: String, method: (String?) -> Unit) {
-        val request = buildGetRequest(url, data)
+    fun get(data: Map<String, String>?, @NonNull path: String, method: (String?) -> Unit) {
+        val request = buildGetRequest(path, data)
 
         okClient.newCall(request)
             .enqueue(lambdaInvoke(method))
@@ -140,8 +144,8 @@ object HttpApi {
      * post请求服务器数据，异步请求
      * 普通的接口回调
      */
-    fun post(any: Any?, @NonNull url: String, callback: IHttpCallback) {
-        val request = buildJsonPost(any, url)
+    fun post(any: Any?, @NonNull path: String, callback: IHttpCallback) {
+        val request = buildJsonPost(any, path)
 
         okClient.newCall(request)
             .enqueue(callback(callback))
@@ -152,8 +156,8 @@ object HttpApi {
      * post请求服务器数据，异步请求
      * 使用lambda形式的函数回调
      */
-    fun post(any: Any?, @NonNull url: String, method: (String?) -> Unit) {
-        val request = buildJsonPost(any, url)
+    fun post(any: Any?, @NonNull path: String, method: (String?) -> Unit) {
+        val request = buildJsonPost(any, path)
 
         okClient.newCall(request)
             .enqueue(lambdaInvoke(method))
@@ -163,8 +167,8 @@ object HttpApi {
      * post请求服务器数据，异步请求
      * 使用liveData作为回调
      */
-    fun post(any: Any?, @NonNull url: String, liveData: MutableLiveData<String?>) {
-        val request = buildJsonPost(any, url)
+    fun post(any: Any?, @NonNull path: String, liveData: MutableLiveData<String?>) {
+        val request = buildJsonPost(any, path)
 
         okClient.newCall(request)
             .enqueue(liveBack(liveData))
@@ -206,13 +210,13 @@ object HttpApi {
     private fun callback(callback: IHttpCallback): Callback {
         return object : Callback {
             override fun onFailure(call: Call, e: IOException) {
-                Log.e("HttpApi", "${e.message}")
+                Log.e(TAG, "${e.message}")
                 callback.onFailed(e.message)
             }
 
             override fun onResponse(call: Call, response: Response) {
                 callback.onSucceeded(response.body?.string())
-                Log.i("HttpApi", "ResponseBodyString: ${response.body?.string()}")
+                Log.i(TAG, "ResponseBodyString: ${response.body?.string()}")
 
             }
         }
@@ -224,13 +228,13 @@ object HttpApi {
     private fun liveBack(callback: MutableLiveData<String?>): Callback {
         return object : Callback {
             override fun onFailure(call: Call, e: IOException) {
-                Log.e("HttpApi", "${e.message}")
+                Log.e(TAG, "${e.message}")
                 callback.postValue(e.message)
             }
 
             override fun onResponse(call: Call, response: Response) {
                 callback.postValue(response.body?.string())
-                Log.i("HttpApi", "ResponseBodyString: ${response.body?.string()}")
+                Log.i(TAG, "ResponseBodyString: ${response.body?.string()}")
 
             }
         }
@@ -243,46 +247,16 @@ object HttpApi {
     private fun lambdaInvoke(callback: (String?) -> Unit): Callback {
         return object : Callback {
             override fun onFailure(call: Call, e: IOException) {
-                Log.e("HttpApi", "${e.message}")
+                Log.e(TAG, "${e.message}")
                 callback.invoke(e.message)
             }
 
             override fun onResponse(call: Call, response: Response) {
                 callback(response.body?.string())
-                Log.i("HttpApi", "ResponseBodyString: ${response.body?.string()}")
+                Log.i(TAG, "ResponseBodyString: ${response.body?.string()}")
 
             }
         }
-    }
-
-    /**
-     * 使用dataResult作为回调结果
-     */
-    fun postResult(
-        any: Any?,
-        @NonNull url: String,
-        callback: MutableLiveData<DataResult<String?>>
-    ) {
-        val request = buildJsonPost(any, url)
-
-        okClient.newCall(request)
-            .enqueue(object : Callback {
-                override fun onFailure(call: Call, e: IOException) {
-                    callback.postValue(
-                        DataResult.Error(
-                            e
-                        )
-                    )
-                }
-
-                override fun onResponse(call: Call, response: Response) {
-                    callback.postValue(
-                        DataResult.Success(
-                            response.body?.string()
-                        )
-                    )
-                }
-            })
     }
 
 }

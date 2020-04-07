@@ -1,7 +1,7 @@
 package org.zhiwei.libui
 
 import org.junit.Test
-import org.zhiwei.libui.*
+import org.zhiwei.libcore.*
 
 /**
  * 作者： 志威  zhiwei.org

@@ -3,11 +3,13 @@ package org.zhiwie.libnet
 import androidx.annotation.NonNull
 import androidx.annotation.Nullable
 import com.google.gson.Gson
+import com.google.gson.JsonParseException
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.suspendCancellableCoroutine
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
+import org.zhiwie.libnet.config.KtHttpLogInterceptor
 import java.io.IOException
 import java.util.concurrent.TimeUnit
 import kotlin.coroutines.resume
@@ -41,7 +43,7 @@ object KtHttp {
         .writeTimeout(10, TimeUnit.SECONDS)//向服务器写入数据的时长，默认10s
         .retryOnConnectionFailure(true)
         .cookieJar(CookieJar.NO_COOKIES)
-//            .addNetworkInterceptor()//添加网络拦截器，可以对okhttp的网络请求做拦截处理，不同于应用拦截器，这里能感知所有网络状态，比如重定向。
+        .addNetworkInterceptor(KtHttpLogInterceptor())//添加网络拦截器，可以对okhttp的网络请求做拦截处理，不同于应用拦截器，这里能感知所有网络状态，比如重定向。
         .build()
 
     //gson对象，免得每次都创建
@@ -192,9 +194,12 @@ object KtHttp {
     /**
      * 将Response的对象，转化为需要的对象类型，也就是将body.string转为bean
      * [clazz] 待转化的对象类型
+     * @return 返回需要的类型对象，可能为null，如果json解析失败的话
      */
-    fun <T> Response.toBean(clazz: Class<T>) {
-        gson.fromJson(this.body?.string(), clazz)
+    fun <T> Response.toBean(clazz: Class<T>): T? {
+        return kotlin.runCatching { gson.fromJson(this.body?.string(), clazz) }.onFailure { e ->
+            e.printStackTrace()
+        }.getOrNull()
     }
 
 

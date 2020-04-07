@@ -2,6 +2,7 @@ package org.zhiwei.libnet
 
 import org.zhiwie.libnet.KtHttp
 import org.junit.Test
+import org.zhiwie.libnet.HttpApi
 
 /**
  * 作者： 志威  zhiwei.org
@@ -18,14 +19,14 @@ import org.junit.Test
  * ----------------------------------------------------------------
  * HttpApi的单元测试
  */
+
 class HttpApiTest {
 
     @Test
     fun testGet() {
-        KtHttp.initConfig("http://ebk.qa.17u.cn/cxyopenapi/handmachine/order/saleTicketCount/")
-        val get = KtHttp.get("http://ebk.qa.17u.cn/cxyopenapi/handmachine/order/saleTicketCount/39")
-        println(get.body?.string())
-        KtHttp.post("")
-
+        HttpApi.initConfig("https://getman.cn/echo")
+            .get(emptyMap(), "?id=3") {
+                println("httpApi get: $it")
+            }
     }
 }
