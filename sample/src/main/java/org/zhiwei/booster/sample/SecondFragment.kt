@@ -8,7 +8,6 @@ import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import org.zhiwei.booster.KtFragment
-import org.zhiwei.booster.R
 
 /**
  * A simple [Fragment] subclass as the second destination in the navigation.

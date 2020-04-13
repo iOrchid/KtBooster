@@ -1,4 +1,4 @@
-package org.zhiwei.booster
+package org.zhiwei.booster.sample
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
@@ -17,6 +17,6 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("org.zhiwei.booster", appContext.packageName)
+        assertEquals("org.zhiwei.booster.sample", appContext.packageName)
     }
 }

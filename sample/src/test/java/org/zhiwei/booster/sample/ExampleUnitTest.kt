@@ -1,4 +1,4 @@
-package org.zhiwei.booster
+package org.zhiwei.booster.sample
 
 import org.junit.Assert.assertEquals
 import org.junit.Test
