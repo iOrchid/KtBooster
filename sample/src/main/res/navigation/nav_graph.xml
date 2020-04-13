@@ -7,8 +7,8 @@
 
     <fragment
         android:id="@+id/FirstFragment"
-        android:name="org.zhiwei.booster.FirstFragment"
-        android:label="@string/first_fragment_label"
+	    android:name="org.zhiwei.booster.sample.FirstFragment"
+	    android:label="@string/first_fragment_label"
         tools:layout="@layout/fragment_first">
 
         <action
@@ -16,9 +16,9 @@
             app:destination="@id/SecondFragment" />
     </fragment>
     <fragment
-        android:id="@+id/SecondFragment"
-        android:name="org.zhiwei.booster.SecondFragment"
-        android:label="@string/second_fragment_label"
+	    android:id="@+id/SecondFragment"
+	    android:name="org.zhiwei.booster.sample.SecondFragment"
+	    android:label="@string/second_fragment_label"
         tools:layout="@layout/fragment_second">
 
         <action

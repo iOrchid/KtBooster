@@ -10,7 +10,7 @@ android {
     buildToolsVersion(buildTools)
 
     defaultConfig {
-        applicationId = "org.zhiwei.booster"
+        applicationId = "org.zhiwei.demo.sample"
         minSdkVersion(minSdk)
         targetSdkVersion(targetSdk)
         versionCode = libCode
