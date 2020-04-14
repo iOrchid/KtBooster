@@ -19,4 +19,9 @@ class ExampleInstrumentedTest {
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
         assertEquals("org.zhiwei.libcore", appContext.packageName)
     }
+
+    @Test
+    fun testStringKtx() {
+        "测试 StringKtx".logD()
+    }
 }

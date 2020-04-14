@@ -8,7 +8,6 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.annotation.ColorInt
 import androidx.fragment.app.Fragment
-import org.zhiwei.libcore.showToast
 
 /**
  * 作者： 志威  zhiwei.org
@@ -30,7 +29,7 @@ import org.zhiwei.libcore.showToast
 
 /**
  * 关闭软键盘
- * [view] 事件控件view
+ * [v] 事件控件view
  */
 fun Fragment.dismissKeyboard(v: View) {
     val imm =
@@ -44,7 +43,7 @@ fun Fragment.dismissKeyboard(v: View) {
  * [duration] Toast.LENGTH_SHORT 或者 Toast。LENGTH_LONG，也就是 0 或 1 默认short
  */
 fun Fragment.showToast(text: String?, duration: Int = Toast.LENGTH_SHORT) {
-    text?.showToast(requireContext(), duration)
+    Toast.makeText(requireContext(), text, duration).show()
 }
 
 

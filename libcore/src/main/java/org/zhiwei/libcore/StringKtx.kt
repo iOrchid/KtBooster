@@ -1,8 +1,6 @@
 package org.zhiwei.libcore
 
-import android.content.Context
 import android.util.Log
-import android.widget.Toast
 
 /**
  * 作者： 志威  zhiwei.org
@@ -20,22 +18,14 @@ import android.widget.Toast
  * String相关的扩展类
  */
 
-//region String 扩展工具类
-
-/**
- * 显示toast提示
- * [context] Context上下文
- * [duration] Toast.LENGTH_SHORT 或者 Toast。LENGTH_LONG，也就是 0 或 1
- */
-fun String.showToast(context: Context, duration: Int = Toast.LENGTH_SHORT) {
-    Toast.makeText(context, this, duration).show()
-}
+//region String 扩展工具类 Log
+private const val TAG = "StringKtx"
 
 /**
  * String打印日志 Debug级别
  * [tag] 当前打印日志的文件类，用作TAG，默认
  */
-fun String.logD(tag: Any) {
+fun String.logD(tag: Any = TAG) {
     if (tag is String) {
         Log.d(tag, this)
     } else {

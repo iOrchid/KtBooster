@@ -13,7 +13,6 @@ import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.LifecycleOwner
-import org.zhiwei.libcore.showToast
 
 /**
  * 作者： 志威  zhiwei.org
@@ -57,7 +56,7 @@ fun <T : ViewDataBinding> Activity.bindView(view: View): T? {
  * [duration] Toast的short或 long的显示flag ，或者填写 0 或 1
  */
 fun Activity.showToast(text: String?, duration: Int = Toast.LENGTH_SHORT) {
-    text?.showToast(this, duration)
+    Toast.makeText(this, text, duration).show()
 }
 
 /**
@@ -77,7 +76,7 @@ fun Activity.statusBar(@ColorInt color: Int) {
 
 /**
  * 关闭软键盘
- * [view] 事件控件view
+ * [v] 事件控件view
  */
 fun Activity.dismissKeyboard(v: View) {
     val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
@@ -97,5 +96,10 @@ fun Activity.dismissKeyboard(v: View) {
 val ComponentActivity.viewLifeCycleOwner: LifecycleOwner
     get() = this
 
+/**
+ * 定义context字段，便于统一fragment中和activity的context使用
+ */
+val Activity.context: Context
+    get() = this
 
 //</editor-folder>

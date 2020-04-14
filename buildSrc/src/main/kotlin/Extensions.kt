@@ -15,13 +15,13 @@
  */
 
 //region build config
-const val kotlin_version = "1.3.71"
+const val kotlin_version = "1.3.72"
 const val compileSdk = 29
 const val buildTools = "29.0.3"
 const val minSdk = 21
 const val targetSdk = 29
 const val libCode = 1
-const val libVersion = "0.1.0-alpha01"
+const val libVersion = "0.1.0-alpha01"//这里的版本号和发布jitpack.io的版本号不一样，那个是github Release页面的
 
 //endregion
 
@@ -34,7 +34,7 @@ object VersionExt {
     internal const val coroutines = "1.3.5"
     internal const val compat = "1.1.0"
     internal const val androidxCoreKtx = "1.2.0"
-    internal const val fragmentKtx = "1.2.3"
+    internal const val fragmentKtx = "1.2.4"
     internal const val activityKtx = "1.1.0"
     internal const val material = "1.1.0"
     internal const val constraint = "2.0.0-beta4"
@@ -49,10 +49,10 @@ object VersionExt {
     //endregion
 
     //region Github excellence project
-    internal const val retrofit = "2.7.2"
+    internal const val retrofit = "2.8.1"
     internal const val gson = "2.8.6"
     internal const val okhttp = "4.4.0"
-    internal const val mmkv = "1.1.0"
+    internal const val mmkv = "1.1.1"
 
     //endregion
 
