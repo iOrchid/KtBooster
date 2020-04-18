@@ -17,7 +17,9 @@ object DepLibrary {
 
 
     //<editor-folder desc="平台基础配置库">
-    const val KOTLIN_LIB = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    const val KOTLIN_LIB_JDK = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    const val KOTLIN_LIB_REFLECT = "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+    const val KOTLIN_LIB = "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     const val COROUTINES_CORE =
         "org.jetbrains.kotlinx:kotlinx-coroutines-core:${VersionExt.coroutines}"
     const val COROUTINES_ANDROID =

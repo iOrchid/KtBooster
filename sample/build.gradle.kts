@@ -11,8 +11,8 @@ android {
 
     defaultConfig {
         applicationId = "org.zhiwei.booster.sample"
-        minSdkVersion(minSdk)
-        targetSdkVersion(targetSdk)
+        minSdkVersion(minSdkNum)
+        targetSdkVersion(targetSdkNum)
         versionCode = libCode
         versionName = libVersion
 
@@ -26,11 +26,11 @@ android {
     }
 
 //AndroidStudio 4 以下使用这种方式配置dataBinding
-    dataBinding {
-        isEnabled = true
-    }
+//    dataBinding {
+//        isEnabled = true
+//    }
     //AS4 以上版本使用这个配置dataBinding
-//    buildFeatures.dataBinding = true
+    buildFeatures.dataBinding = true
 
 //在Project的build.gradle.kts中统一配置了
 //    compileOptions {
@@ -47,7 +47,7 @@ android {
 dependencies {
     //这里演示了不同的kts下的添加依赖的方式
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
-    implementation(kotlin("stdlib", org.jetbrains.kotlin.config.KotlinCompilerVersion.VERSION))
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.3.72")
     //    implementation(group = "org.jetbrains.kotlinx",name = "kotlinx-coroutines-android",version = "1.3.3")
     implementation(DepLibrary.APPCOMPAT)
     implementation(DepLibrary.CORE_KTX)

@@ -18,10 +18,10 @@
 const val kotlin_version = "1.3.72"
 const val compileSdk = 29
 const val buildTools = "29.0.3"
-const val minSdk = 21
-const val targetSdk = 29
+const val minSdkNum = 21
+const val targetSdkNum = 29
 const val libCode = 1
-const val libVersion = "0.1.0-alpha01"//这里的版本号和发布jitpack.io的版本号不一样，那个是github Release页面的
+const val libVersion = "0.1.0-alpha02"//这里的版本号和发布jitpack.io的版本号不一样，那个是github Release页面的
 
 //endregion
 

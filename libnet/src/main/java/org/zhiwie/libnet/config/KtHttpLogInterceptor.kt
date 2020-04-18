@@ -2,8 +2,8 @@ package org.zhiwie.libnet.config
 
 import android.util.Log
 import okhttp3.*
-import org.zhiwei.libcore.MILLIS_PATTERN
-import org.zhiwei.libcore.toDateTimeStr
+import org.zhiwei.libcore.TimeKt.MILLIS_PATTERN
+import org.zhiwei.libcore.TimeKt.toDateTimeStr
 
 /**
  * 作者： 志威  zhiwei.org

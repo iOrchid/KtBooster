@@ -11,8 +11,8 @@ android {
     buildToolsVersion(buildTools)
 
     defaultConfig {
-        minSdkVersion(minSdk)
-        targetSdkVersion(targetSdk)
+        minSdkVersion(minSdkNum)
+        targetSdkVersion(targetSdkNum)
         versionCode = libCode
         versionName = libVersion
 
@@ -31,7 +31,7 @@ android {
 
 dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
-    implementation(kotlin("stdlib", kotlin_version))
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.3.72")
     implementation(DepLibrary.COROUTINES_ANDROID)
     implementation(DepLibrary.LIFECYCLE_LIVEDATA)
     implementation(DepLibrary.LIFECYCLE_LIVEDATA_KTX)

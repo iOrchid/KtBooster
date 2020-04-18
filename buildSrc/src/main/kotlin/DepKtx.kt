@@ -1,6 +1,5 @@
 import org.gradle.api.artifacts.Dependency
 import org.gradle.api.artifacts.dsl.DependencyHandler
-import org.gradle.kotlin.dsl.DependencyHandlerScope
 
 /**
  * 作者： 志威  zhiwei.org
@@ -22,8 +21,10 @@ import org.gradle.kotlin.dsl.DependencyHandlerScope
 /**
  * 添加平台相关的基础依赖dependencies
  */
-fun DependencyHandlerScope.addCoreDependencies() {
+fun DependencyHandler.addCoreDependencies() {
     implementation(DepLibrary.KOTLIN_LIB)
+    implementation(DepLibrary.KOTLIN_LIB_JDK)
+    implementation(DepLibrary.KOTLIN_LIB_REFLECT)
     implementation(DepLibrary.APPCOMPAT)
     implementation(DepLibrary.CORE_KTX)
     implementation(DepLibrary.COROUTINES_ANDROID)
@@ -39,7 +40,7 @@ fun DependencyHandlerScope.addCoreDependencies() {
 /**
  * 添加JetPack相关的依赖dependencies
  */
-fun DependencyHandlerScope.addJetPackDependencies() {
+fun DependencyHandler.addJetPackDependencies() {
     kapt(DepLibrary.LIFECYCLE_COMMON_JAVA8)
     implementation(DepLibrary.LIFECYCLE_LIVEDATA)
     implementation(DepLibrary.LIFECYCLE_LIVEDATA_KTX)
@@ -71,14 +72,14 @@ fun DependencyHandlerScope.addJetPackDependencies() {
  * 添加常用的 Github等第三方依赖dependencies
  * 如okHttp、Gson、Retrofit、glide 等等
  */
-fun DependencyHandlerScope.addGithubDependencies() {
+fun DependencyHandler.addGithubDependencies() {
 
 }
 
 /**
  * 添加test相关的依赖dependencies
  */
-fun DependencyHandlerScope.addTestDependencies() {
+fun DependencyHandler.addTestDependencies() {
     testImplementation(DepLibrary.JUNIT)
     androidTestImplementation(DepLibrary.JUNIT_KTX)
 
