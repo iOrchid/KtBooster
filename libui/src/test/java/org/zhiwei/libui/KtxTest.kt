@@ -1,8 +1,5 @@
 package org.zhiwei.libui
 
-import org.junit.Test
-import org.zhiwei.libcore.*
-
 /**
  * 作者： 志威  zhiwei.org
  * 主页： Github: https://github.com/zhiwei1990
@@ -20,32 +17,5 @@ import org.zhiwei.libcore.*
  */
 class KtxTest {
 
-    @Test
-    fun testTimeKtx() {
-        println(afterTomorrowDate)
-        println(beforeYesterdayDate)
-        println(nowDateStr)
-        println(nowDateTimeStr)
-        println(nowMillis)
-        println(nowTimeStr)
-        println(nowWeek)
-        println(tomorrowDate)
-        println(tomorrowWeek)
-        println(yesterdayDate)
-        println(yesterdayWeek)
-
-        println("-----------------------------------")
-
-        println(getCnWeek(nowMillis))
-        println(getDateSpan("2020-03-22"))
-        println(getDateTimeSpan("2020-02-21 22:31:32"))
-        println(getTimeSpan(yesterdayDate.toMillis(pattern = DATE_PATTERN)))
-        println(getUsWeek(nowMillis))
-        println(isAfterTomorrow(tomorrowDate.toMillis(pattern = DATE_PATTERN)))
-        println(isBeforeYesterday(tomorrowDate.toMillis(pattern = DATE_PATTERN)))
-        println(isToday(tomorrowDate.toMillis(pattern = DATE_PATTERN)))
-        println(isTomorrow(tomorrowDate.toMillis(pattern = DATE_PATTERN)))
-        println(isYesterday(tomorrowDate.toMillis(pattern = DATE_PATTERN)))
-    }
 }
  

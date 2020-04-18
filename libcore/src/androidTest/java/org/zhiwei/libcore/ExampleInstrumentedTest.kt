@@ -21,7 +21,11 @@ class ExampleInstrumentedTest {
     }
 
     @Test
-    fun testStringKtx() {
-        "测试 StringKtx".logD()
+    fun testLogKtx() {
+        LogKt.v("测试看看logv的样式如何 ")
+        LogKt.d("然后再看看logd的样子，在一起会怎样 ")
+        LogKt.i("那么，logi也不会缺席，总要来的吧 ", tr = NullPointerException("测试Logi的抛出异常会怎样"))
+        LogKt.w("未来简史，The feature time for you & You and Me ")
+        LogKt.e("朝花夕拾、红楼梦、三国演义、菜根谭、围炉夜话、格言联璧、古文观止、道德经、资治通鉴、大秦帝国")
     }
 }
