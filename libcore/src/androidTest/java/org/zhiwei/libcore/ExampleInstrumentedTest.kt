@@ -28,4 +28,45 @@ class ExampleInstrumentedTest {
         LogKt.w("未来简史，The feature time for you & You and Me ")
         LogKt.e("朝花夕拾、红楼梦、三国演义、菜根谭、围炉夜话、格言联璧、古文观止、道德经、资治通鉴、大秦帝国")
     }
+
+    @Test
+    fun testSpKtx() {
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
+        SpKtx.init(context).put("a", 1)
+        SpKtx.put("b", 2L)
+        SpKtx.put("c", 3f)
+        SpKtx.put("d", false)
+        SpKtx.put("e", "eeeee")
+        SpKtx.put("f", setOf("hh", "heihei", "jj"))
+        SpKtx.put(mapOf("33" to 33, "ff" to "FF"))
+        SpKtx.put("3333" to 3333, "ffgff" to "FggfF")
+
+        SpKtx.get<Int, String>("a", "j").logI()
+        SpKtx.get<Int, String, String>("a", "j", "e").logI()
+
+        SpKtx.getInt("a").logD()
+        SpKtx.getLong("b").logD()
+        SpKtx.getFloat("c").logD()
+        SpKtx.getBoolean("d").logD()
+        SpKtx.getString("e")?.logD()
+        SpKtx.getStringSet("f")?.logD()
+        SpKtx.getAll()?.logD()
+        SpKtx.remove("a", "d")
+        SpKtx.has("f").logD()
+        SpKtx.clear()
+        SpKtx.has("f").logD()
+
+
+    }
+
+    /**
+     * 内部使用扩展log函数，便利而已
+     */
+    private fun <T : Any> T.logD() {
+        LogKt.d(this)
+    }
+
+    private fun <T : Any> T.logI() {
+        LogKt.i(this)
+    }
 }

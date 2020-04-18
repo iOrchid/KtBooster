@@ -33,9 +33,9 @@ android {
 dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
     implementation(kotlin("stdlib", kotlin_version))
-//    implementation(DepLibrary.APPCOMPAT)
-//    implementation(DepLibrary.CORE_KTX)
-//    implementation(DepLibrary.COROUTINES_ANDROID)
+    implementation(DepLibrary.APPCOMPAT)
+    implementation(DepLibrary.CORE_KTX)
+    implementation(DepLibrary.COROUTINES_ANDROID)
 
     //test dependencies
     addTestDependencies()
