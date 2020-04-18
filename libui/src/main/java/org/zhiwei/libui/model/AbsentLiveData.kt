@@ -1,4 +1,4 @@
-package org.zhiwei.libui
+package org.zhiwei.libui.model
 
 import androidx.lifecycle.LiveData
 

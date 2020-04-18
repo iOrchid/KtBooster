@@ -1,4 +1,4 @@
-package org.zhiwei.libui
+package org.zhiwei.libui.model
 
 /**
  * 作者： 志威  zhiwei.org

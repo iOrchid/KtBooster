@@ -218,9 +218,10 @@ object TimeKt {
     }
 
     /**
-     * 对比两个时间的差
+     * 对比两个时间的差 天数
      * [source] 第一个时间毫秒值
      * [destination] 第二个时间毫秒值
+     * @return 返回的天数
      */
     fun getTimeSpan(source: Long, destination: Long = nowMillis): Int {
         return ((source - destination) / ONE_DAY_MILLIS).toInt()
@@ -248,6 +249,7 @@ object TimeKt {
      * 日期格式 yyyy-MM-dd HH:mm:ss  的时间 string对比间隔
      * [source] 第一个时间
      * [destination] 第二个时间
+     * 返回相差天数
      */
     fun getDateTimeSpan(
         source: String,
