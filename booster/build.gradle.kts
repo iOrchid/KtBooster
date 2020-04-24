@@ -29,11 +29,11 @@ android {
 		}
 	}
 //AndroidStudio 4 以下使用这种方式配置dataBinding
-//    dataBinding {
-//        isEnabled = true
-//    }
+    dataBinding {
+        isEnabled = true
+    }
 	//AS4 以上版本使用这个配置dataBinding
-	buildFeatures.dataBinding = true
+//	buildFeatures.dataBinding = true
 }
 
 dependencies {

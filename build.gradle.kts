@@ -9,7 +9,7 @@ buildscript {
     }
 
     dependencies {
-        classpath("com.android.tools.build:gradle:4.1.0-alpha07")
+        classpath("com.android.tools.build:gradle:3.6.3")
         classpath(kotlin("gradle-plugin", version = kotlin_version))
         classpath("androidx.navigation:navigation-safe-args-gradle-plugin:$navigation")
         //1、发布到jitpack.io的步骤1
