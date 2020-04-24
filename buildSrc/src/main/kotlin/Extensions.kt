@@ -21,7 +21,7 @@ const val buildToolsNum = "29.0.3"
 const val minSdkNum = 21
 const val targetSdkNum = 29
 const val libCode = 2
-const val libVersion = "0.1.2"//这里的版本号和发布jitpack.io的版本号不一样，那个是github Release页面的
+const val libVersion = "0.1.2.1"//这里的版本号和发布jitpack.io的版本号不一样，那个是github Release页面的
 
 //endregion
 
