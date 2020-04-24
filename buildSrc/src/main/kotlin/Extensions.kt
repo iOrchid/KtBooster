@@ -16,8 +16,8 @@
 
 //region build config
 const val kotlin_version = "1.3.72"
-const val compileSdk = 29
-const val buildTools = "29.0.3"
+const val compileSdkNum = 29
+const val buildToolsNum = "29.0.3"
 const val minSdkNum = 21
 const val targetSdkNum = 29
 const val libCode = 2

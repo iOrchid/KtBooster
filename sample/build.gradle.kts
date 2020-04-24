@@ -6,8 +6,8 @@ plugins {
 }
 
 android {
-    compileSdkVersion(compileSdk)
-    buildToolsVersion(buildTools)
+    compileSdkVersion(compileSdkNum)
+    buildToolsVersion(buildToolsNum)
 
     defaultConfig {
         applicationId = "org.zhiwei.booster.sample"
@@ -59,7 +59,7 @@ dependencies {
     implementation(DepLibrary.NAVIGATION_FRAGMENT_KTX)
     implementation(DepLibrary.NAVIGATION_UI_KTX)
     implementation(project(mapOf("path" to ":booster")))
-//    implementation("com.github.zhiwei1990:KtBooster:0.1.0")
+//    implementation("com.github.zhiwei1990:KtBooster:0.1.1")//尽管jitpack上版本号v0.1.1，这里可以不带v的
 
     //test dependencies，使用的是buildSrc下面的自定义扩展
     addTestDependencies()
