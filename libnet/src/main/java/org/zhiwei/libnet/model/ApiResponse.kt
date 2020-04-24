@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.zhiwie.libnet.model
+package org.zhiwei.libnet.model
 
 import retrofit2.Response
 

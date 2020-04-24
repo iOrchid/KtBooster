@@ -1,4 +1,4 @@
-package org.zhiwie.libnet.config
+package org.zhiwei.libnet.config
 
 import okhttp3.Cookie
 import okhttp3.CookieJar

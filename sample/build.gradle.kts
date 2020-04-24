@@ -44,9 +44,16 @@ android {
 
 }
 
+//使用aar
+repositories {
+    flatDir {
+        dirs("libs")
+    }
+}
+
 dependencies {
     //这里演示了不同的kts下的添加依赖的方式
-    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
+    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar", "*.aar"))))
     implementation("org.jetbrains.kotlin:kotlin-stdlib:1.3.72")
     //    implementation(group = "org.jetbrains.kotlinx",name = "kotlinx-coroutines-android",version = "1.3.3")
     implementation(DepLibrary.APPCOMPAT)
@@ -58,8 +65,8 @@ dependencies {
 
     implementation(DepLibrary.NAVIGATION_FRAGMENT_KTX)
     implementation(DepLibrary.NAVIGATION_UI_KTX)
-    implementation(project(mapOf("path" to ":booster")))
-//    implementation("com.github.zhiwei1990:KtBooster:0.1.1")//尽管jitpack上版本号v0.1.1，这里可以不带v的
+    implementation(project(mapOf("path" to ":booster")))//module使用形式
+//    implementation("com.github.zhiwei1990:KtBooster:v0.1.1")//尽管jitpack上版本号v0.1.1，这里可以不带v的
 
     //test dependencies，使用的是buildSrc下面的自定义扩展
     addTestDependencies()

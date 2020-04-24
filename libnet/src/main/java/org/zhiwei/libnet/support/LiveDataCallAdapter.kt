@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package org.zhiwie.libnet.support
+package org.zhiwei.libnet.support
 
 
 import androidx.lifecycle.LiveData
-import org.zhiwie.libnet.model.ApiResponse
-import org.zhiwie.libnet.model.UNKNOWN_ERROR_CODE
+import org.zhiwei.libnet.model.ApiResponse
+import org.zhiwei.libnet.model.UNKNOWN_ERROR_CODE
 import retrofit2.Call
 import retrofit2.CallAdapter
 import retrofit2.Callback

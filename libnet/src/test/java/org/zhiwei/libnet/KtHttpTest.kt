@@ -1,7 +1,6 @@
 package org.zhiwei.libnet
 
 import org.junit.Test
-import org.zhiwie.libnet.KtHttp
 
 /**
  * 作者： 志威  zhiwei.org

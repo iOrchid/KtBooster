@@ -1,4 +1,4 @@
-package org.zhiwie.libnet.config
+package org.zhiwei.libnet.config
 
 import android.util.Log
 import okhttp3.*
@@ -22,9 +22,12 @@ import org.zhiwei.libcore.TimeKt.toDateTimeStr
  */
 class KtHttpLogInterceptor : Interceptor {
 
-    private var logLevel: LogLevel = LogLevel.NONE//打印日期的标记
-    private var colorLevel: ColorLevel = ColorLevel.DEBUG//默认是debug级别的logcat
-    private var logTag = TAG//日志的Logcat的Tag
+    private var logLevel: LogLevel =
+        LogLevel.NONE//打印日期的标记
+    private var colorLevel: ColorLevel =
+        ColorLevel.DEBUG//默认是debug级别的logcat
+    private var logTag =
+        TAG//日志的Logcat的Tag
 
     /**
      * 设置LogLevel

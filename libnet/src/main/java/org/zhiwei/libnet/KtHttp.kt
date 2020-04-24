@@ -1,15 +1,14 @@
-package org.zhiwie.libnet
+package org.zhiwei.libnet
 
 import androidx.annotation.NonNull
 import androidx.annotation.Nullable
 import com.google.gson.Gson
-import com.google.gson.JsonParseException
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.suspendCancellableCoroutine
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
-import org.zhiwie.libnet.config.KtHttpLogInterceptor
+import org.zhiwei.libnet.config.KtHttpLogInterceptor
 import java.io.IOException
 import java.util.concurrent.TimeUnit
 import kotlin.coroutines.resume
@@ -36,7 +35,7 @@ object KtHttp {
     private var baseUrl: String? = null
 
     //okHttpClient对象构建配置
-    private val okClient = OkHttpClient.Builder()
+    private val defalutClient = OkHttpClient.Builder()
         .callTimeout(10, TimeUnit.SECONDS)//完整请求超时时长，从发起到接收返回数据，默认值0，不限定,
         .connectTimeout(10, TimeUnit.SECONDS)//与服务器建立连接的时长，默认10s
         .readTimeout(10, TimeUnit.SECONDS)//读取服务器返回数据的时长
@@ -45,6 +44,8 @@ object KtHttp {
         .cookieJar(CookieJar.NO_COOKIES)
         .addNetworkInterceptor(KtHttpLogInterceptor())//添加网络拦截器，可以对okhttp的网络请求做拦截处理，不同于应用拦截器，这里能感知所有网络状态，比如重定向。
         .build()
+
+    private var okClient = defalutClient
 
     //gson对象，免得每次都创建
     private val gson = Gson()
@@ -56,9 +57,12 @@ object KtHttp {
 
     /**
      * 配置server的根url地址,也可以自定义okClient
+     * [baseUrl] 项目接口的baseUrl
+     * [builder] 函数参数，创建okHttpClient对象
      */
-    fun initConfig(@NonNull baseUrl: String, builder: () -> OkHttpClient? = { okClient }): KtHttp {
+    fun initConfig(@NonNull baseUrl: String, builder: () -> OkHttpClient = { okClient }): KtHttp {
         KtHttp.baseUrl = baseUrl
+        okClient = builder.invoke()
         return this
     }
 

@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package org.zhiwie.libnet.support
+package org.zhiwei.libnet.support
 
 import androidx.lifecycle.LiveData
-import org.zhiwie.libnet.model.ApiResponse
+import org.zhiwei.libnet.model.ApiResponse
 import retrofit2.CallAdapter
 import retrofit2.CallAdapter.Factory
 import retrofit2.Retrofit

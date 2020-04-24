@@ -5,7 +5,7 @@ import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import org.zhiwei.booster.KtExecutors
-import org.zhiwie.libnet.model.*
+import org.zhiwei.libnet.model.*
 
 /**
  * 作者： 志威  zhiwei.org
