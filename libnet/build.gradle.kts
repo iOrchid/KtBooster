@@ -45,8 +45,6 @@ dependencies {
 
     implementation(DepLibrary.GSON)
 
-    //依赖core
-    api(project(":libcore"))
 
     //test
     addTestDependencies()

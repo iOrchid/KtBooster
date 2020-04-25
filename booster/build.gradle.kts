@@ -40,6 +40,7 @@ dependencies {
 	implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
 	api(project(mapOf("path" to ":libnet")))
 	api(project(mapOf("path" to ":libui")))
+	api(project(mapOf("path" to ":libcore")))
 
 	//region base dependencies
 	addCoreDependencies()
