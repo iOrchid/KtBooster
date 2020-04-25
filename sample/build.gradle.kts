@@ -33,23 +33,6 @@ android {
 	//AS4 以上版本使用这个配置dataBinding
 //    buildFeatures.dataBinding = true
 
-//在Project的build.gradle.kts中统一配置了
-//    compileOptions {
-//        sourceCompatibility = JavaVersion.VERSION_1_8
-//        targetCompatibility = JavaVersion.VERSION_1_8
-//    }
-//
-//    kotlinOptions {
-//        jvmTarget = "1.8"
-//    }
-
-}
-
-//使用aar
-repositories {
-	flatDir {
-		dirs("libs")
-	}
 }
 
 dependencies {
