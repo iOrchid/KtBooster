@@ -200,8 +200,14 @@ object KtHttp {
      * [clazz] 待转化的对象类型
      * @return 返回需要的类型对象，可能为null，如果json解析失败的话
      */
+    @Suppress("UNCHECKED_CAST")
     fun <T> Response.toBean(clazz: Class<T>): T? {
-        return kotlin.runCatching { gson.fromJson(this.body?.string(), clazz) }.onFailure { e ->
+        if (clazz.isAssignableFrom(String::class.java)) {
+            return this.body?.string() as T
+        }
+        return kotlin.runCatching {
+            gson.fromJson(this.body?.string(), clazz)
+        }.onFailure { e ->
             e.printStackTrace()
         }.getOrNull()
     }
