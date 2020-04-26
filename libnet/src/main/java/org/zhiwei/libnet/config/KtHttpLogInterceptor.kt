@@ -2,8 +2,8 @@ package org.zhiwei.libnet.config
 
 import android.util.Log
 import okhttp3.*
-import org.zhiwei.libcore.TimeKt.MILLIS_PATTERN
-import org.zhiwei.libcore.TimeKt.toDateTimeStr
+import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  * 作者： 志威  zhiwei.org
@@ -166,6 +166,14 @@ class KtHttpLogInterceptor : Interceptor {
 
     companion object {
         private const val TAG = "<KtHttp>"//默认的TAG
+
+        //时间格式化
+        const val MILLIS_PATTERN = "yyyy-MM-dd HH:mm:ss.SSSXXX"
+
+        //转化为格式化的时间字符串
+        fun toDateTimeStr(millis: Long, pattern: String): String {
+            return SimpleDateFormat(pattern, Locale.getDefault()).format(millis)
+        }
     }
 
 

@@ -102,11 +102,12 @@ object LogKt {
         tag: String = DEFAULT_TAG
     ) {
         //方法栈，想要显示出对外使用的时候，调用点的栈区信息，除去该工具类内部的函数栈
-
-        val outCallInfo = Thread.currentThread().stackTrace[2]
+        val stackTrace = Thread.currentThread().stackTrace
+        val innerLastIndex = stackTrace.indexOfLast { it.fileName == "LogKtx.kt" }
+        val outCallInfo = stackTrace[innerLastIndex + 1]
 
         val message = if (decorateMsg) """
-${outCallInfo.fileName}-->${outCallInfo.className}-->${outCallInfo.methodName}-->LineNum:${outCallInfo.lineNumber}
+${outCallInfo.fileName}-->${outCallInfo.className.substringAfterLast('.')}-->${outCallInfo.methodName}-->LineNum:${outCallInfo.lineNumber}
 ---------------------------------------------------------------------------------------------------
 >>>     $msg
 ---------------------------------------------------------------------------------------------------

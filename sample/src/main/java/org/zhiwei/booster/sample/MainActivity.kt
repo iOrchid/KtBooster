@@ -6,6 +6,7 @@ import android.view.MenuItem
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
 import org.zhiwei.booster.KtActivity
+import org.zhiwei.libcore.LogKt
 
 class MainActivity : KtActivity() {
 
@@ -16,8 +17,10 @@ class MainActivity : KtActivity() {
 
 		fab.setOnClickListener { view ->
 			Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-					.setAction("Action", null).show()
+				.setAction("Action", null).show()
+			LogKt.i("测试 logKt的打印栈")
 		}
+		LogKt.d("tag ddd", "测试 logKt的打印栈")
 	}
 
 	override fun onCreateOptionsMenu(menu: Menu): Boolean {
