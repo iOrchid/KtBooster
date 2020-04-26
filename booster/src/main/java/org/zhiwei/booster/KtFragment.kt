@@ -1,9 +1,7 @@
 package org.zhiwei.booster
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import androidx.annotation.LayoutRes
+import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
@@ -23,15 +21,25 @@ import androidx.lifecycle.Observer
  * ----------------------------------------------------------------
  * Fragment基类封装，包含必要的公用属性、扩展函数
  */
-abstract class KtFragment : Fragment() {
+abstract class KtFragment<T : ViewDataBinding> : Fragment {
+
+    protected var mBinding: T? = null
+
+    /**
+     * 无参构造函数
+     */
+    constructor() : super()
+
+    /**
+     * 可以填入layout布局的构造函数，使用viewBinding的方便
+     * [layout] layout布局文件的id
+     */
+    constructor(@LayoutRes layout: Int) : super(layout)
 
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return super.onCreateView(inflater, container, savedInstanceState)
+    override fun onDestroy() {
+        mBinding = null
+        super.onDestroy()
     }
 
     /**
