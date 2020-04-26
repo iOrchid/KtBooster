@@ -75,7 +75,7 @@ object HttpApi {
      * get请求服务器数据,异步请求，接口回调形式
      * [data]为map形式的key -- value 请求参数，或者别的形式
      */
-    fun get(data: Map<String, String>?, @NonNull path: String, callback: IHttpCallback) {
+    fun get(data: Map<String, String>? = null, @NonNull path: String, callback: IHttpCallback) {
         val request = buildGetRequest(path, data)
         okClient.newCall(request)
             .enqueue(callback(callback))
@@ -85,7 +85,11 @@ object HttpApi {
      * get请求服务器数据,异步请求，liveData回调形式
      * [data]为map形式的key -- value 请求参数，或者别的形式
      */
-    fun get(data: Map<String, String>?, @NonNull path: String, liveData: MutableLiveData<String?>) {
+    fun get(
+        data: Map<String, String>? = null,
+        @NonNull path: String,
+        liveData: MutableLiveData<String?>
+    ) {
         val request = buildGetRequest(path, data)
 
         okClient.newCall(request)
@@ -96,7 +100,7 @@ object HttpApi {
      * get请求服务器数据,异步请求，lambda回调形式
      * [data]为map形式的key -- value 请求参数，或者别的形式
      */
-    fun get(data: Map<String, String>?, @NonNull path: String, method: (String?) -> Unit) {
+    fun get(data: Map<String, String>? = null, @NonNull path: String, method: (String?) -> Unit) {
         val request = buildGetRequest(path, data)
 
         okClient.newCall(request)
@@ -148,7 +152,7 @@ object HttpApi {
      * post请求服务器数据，异步请求
      * 普通的接口回调
      */
-    fun post(any: Any?, @NonNull path: String, callback: IHttpCallback) {
+    fun post(any: Any? = null, @NonNull path: String, callback: IHttpCallback) {
         val request = buildJsonPost(any, path)
 
         okClient.newCall(request)
@@ -160,7 +164,7 @@ object HttpApi {
      * post请求服务器数据，异步请求
      * 使用lambda形式的函数回调
      */
-    fun post(any: Any?, @NonNull path: String, method: (String?) -> Unit) {
+    fun post(any: Any? = null, @NonNull path: String, method: (String?) -> Unit) {
         val request = buildJsonPost(any, path)
 
         okClient.newCall(request)
@@ -171,7 +175,7 @@ object HttpApi {
      * post请求服务器数据，异步请求
      * 使用liveData作为回调
      */
-    fun post(any: Any?, @NonNull path: String, liveData: MutableLiveData<String?>) {
+    fun post(any: Any? = null, @NonNull path: String, liveData: MutableLiveData<String?>) {
         val request = buildJsonPost(any, path)
 
         okClient.newCall(request)
@@ -256,8 +260,15 @@ object HttpApi {
             }
 
             override fun onResponse(call: Call, response: Response) {
-                callback(response.body?.string())
-                Log.i(TAG, "ResponseBodyString: ${response.body?.string()}")
+                kotlin.runCatching {
+                    response.body?.string()
+                }.onSuccess { str ->
+                    callback(str)
+                    Log.i(TAG, "ResponseBodyString: $str")
+                }.onFailure {
+                    it.printStackTrace()
+                    Log.e(TAG, "ResponseBodyString Error")
+                }
 
             }
         }
