@@ -31,7 +31,7 @@ android {
 
 dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.3.72")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version")
     implementation(DepLibrary.COROUTINES_ANDROID)
     implementation(DepLibrary.LIFECYCLE_LIVEDATA)
     implementation(DepLibrary.LIFECYCLE_LIVEDATA_KTX)
@@ -40,7 +40,7 @@ dependencies {
     implementation(DepLibrary.RETROFIT)
     implementation(DepLibrary.RETROFIT_CONVERTER_GSON)
 
-    implementation(DepLibrary.OKHTTP)
+    api(DepLibrary.OKHTTP)
     implementation(DepLibrary.MOCK_OKHTTP)
 
     implementation(DepLibrary.GSON)

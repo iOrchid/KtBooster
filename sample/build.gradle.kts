@@ -38,7 +38,7 @@ android {
 dependencies {
     //这里演示了不同的kts下的添加依赖的方式
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar", "*.aar"))))
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.3.72")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version")
     //    implementation(group = "org.jetbrains.kotlinx",name = "kotlinx-coroutines-android",version = "1.3.3")
     implementation(DepLibrary.APPCOMPAT)
     implementation(DepLibrary.CORE_KTX)

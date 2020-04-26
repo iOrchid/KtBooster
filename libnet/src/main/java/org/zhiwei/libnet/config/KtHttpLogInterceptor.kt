@@ -20,14 +20,15 @@ import java.util.*
  * ----------------------------------------------------------------
  * 用于记录okHttp的网络日志的拦截器
  */
-class KtHttpLogInterceptor : Interceptor {
+class KtHttpLogInterceptor(block: (KtHttpLogInterceptor.() -> Unit)? = null) : Interceptor {
 
-    private var logLevel: LogLevel =
-        LogLevel.NONE//打印日期的标记
-    private var colorLevel: ColorLevel =
-        ColorLevel.DEBUG//默认是debug级别的logcat
-    private var logTag =
-        TAG//日志的Logcat的Tag
+    private var logLevel: LogLevel = LogLevel.NONE//打印日期的标记
+    private var colorLevel: ColorLevel = ColorLevel.DEBUG//默认是debug级别的logcat
+    private var logTag = TAG//日志的Logcat的Tag
+
+    init {
+        block?.invoke(this)
+    }
 
     /**
      * 设置LogLevel
@@ -141,7 +142,10 @@ class KtHttpLogInterceptor : Interceptor {
                     "响应 Header: {${header.first}=${header.second}}\n"
                 }
                 sb.appendln(headersStr)
-                    .appendln(response.body)
+                val bodyStr = kotlin.runCatching {
+                    response.body?.string()
+                }.getOrNull()
+                sb.appendln(bodyStr)
             }
         }
         sb.append("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")

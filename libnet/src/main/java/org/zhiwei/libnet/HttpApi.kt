@@ -1,5 +1,6 @@
 package org.zhiwei.libnet
 
+import android.net.Uri
 import android.util.Log
 import androidx.annotation.NonNull
 import androidx.annotation.Nullable
@@ -116,9 +117,7 @@ object HttpApi {
         @NonNull path: String,
         @Nullable params: Map<String, String>? = null
     ): Request {
-        //如果baseUrl没有配置，则抛异常，提示,后期可以更严格的正则匹配url为合法网址
-        baseUrl ?: throw IllegalArgumentException("BaseUrl必须要初始化配置正确，方可正常使用HttpApi")
-
+        checkBaseUrl()
         //便于对不是baseUrl的链接做接受;下面的处理方式可能不是最佳，也可以方法签名中默认参数flag标记是否独立url
         var url = if (path.startsWith(
                 "http://",
@@ -189,9 +188,7 @@ object HttpApi {
      * [any] 请求数据对象
      */
     private fun buildJsonPost(any: Any?, @NonNull path: String): Request {
-        //如果baseUrl没有配置，则抛异常，提示,后期可以更严格的正则匹配url为合法网址
-        baseUrl ?: throw IllegalArgumentException("BaseUrl必须要初始化配置正确，方可正常使用HttpApi")
-
+        checkBaseUrl()
         val url = if (path.startsWith(
                 "http://",
                 true
@@ -274,4 +271,13 @@ object HttpApi {
         }
     }
 
+    /**
+     * 校验检查baseUrl
+     */
+    private fun checkBaseUrl() {
+        //如果baseUrl没有配置，则抛异常，提示,后期可以更严格的正则匹配url为合法网址
+        baseUrl ?: throw IllegalArgumentException("BaseUrl必须要初始化配置正确，方可正常使用HttpApi")
+        Uri.parse(baseUrl).scheme
+            ?: throw IllegalArgumentException("BaseUrl格式不合法,请检查是否有scheme")
+    }
 }

@@ -32,7 +32,7 @@ android {
 
 dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.3.72")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version")
     implementation(DepLibrary.APPCOMPAT)
     implementation(DepLibrary.CORE_KTX)
     implementation(DepLibrary.COROUTINES_ANDROID)

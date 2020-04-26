@@ -1,5 +1,6 @@
 package org.zhiwei.libnet
 
+import android.net.Uri
 import androidx.annotation.NonNull
 import androidx.annotation.Nullable
 import com.google.gson.Gson
@@ -42,7 +43,9 @@ object KtHttp {
         .writeTimeout(10, TimeUnit.SECONDS)//向服务器写入数据的时长，默认10s
         .retryOnConnectionFailure(true)
         .cookieJar(CookieJar.NO_COOKIES)
-        .addNetworkInterceptor(KtHttpLogInterceptor())//添加网络拦截器，可以对okhttp的网络请求做拦截处理，不同于应用拦截器，这里能感知所有网络状态，比如重定向。
+        .addNetworkInterceptor(KtHttpLogInterceptor {
+            logLevel(KtHttpLogInterceptor.LogLevel.BODY)
+        })//添加网络拦截器，可以对okhttp的网络请求做拦截处理，不同于应用拦截器，这里能感知所有网络状态，比如重定向。
         .build()
 
     private var okClient = defalutClient
@@ -78,9 +81,7 @@ object KtHttp {
         @NonNull path: String,
         @Nullable params: Map<String, String>? = null
     ): Request {
-        //如果baseUrl没有配置，则抛异常，提示,后期可以更严格的正则匹配url为合法网址
-        baseUrl ?: throw IllegalArgumentException("BaseUrl必须要初始化配置正确，方可正常使用HttpApi")
-
+        checkBaseUrl()
         //便于对不是baseUrl的链接做接受;下面的处理方式可能不是最佳，也可以方法签名中默认参数flag标记是否独立url
         var url = if (path.startsWith(
                 "http://",
@@ -112,9 +113,7 @@ object KtHttp {
      * [body] 请求数据对象
      */
     private fun buildJsonPost(body: Any?, @NonNull path: String): Request {
-        //如果baseUrl没有配置，则抛异常，提示,后期可以更严格的正则匹配url为合法网址
-        baseUrl ?: throw IllegalArgumentException("BaseUrl必须要初始化配置正确，方可正常使用HttpApi")
-
+        checkBaseUrl()
         val url = if (path.startsWith(
                 "http://",
                 true
@@ -131,6 +130,16 @@ object KtHttp {
             .post(data.toRequestBody(mediaType))
             .tag(data)
             .build()
+    }
+
+    /**
+     * 校验检查baseUrl
+     */
+    private fun checkBaseUrl() {
+        //如果baseUrl没有配置，则抛异常，提示,后期可以更严格的正则匹配url为合法网址
+        baseUrl ?: throw IllegalArgumentException("BaseUrl必须要初始化配置正确，方可正常使用HttpApi")
+        Uri.parse(baseUrl).scheme
+            ?: throw IllegalArgumentException("BaseUrl格式不合法,请检查是否有scheme")
     }
 
     //endregion
@@ -203,7 +212,9 @@ object KtHttp {
     @Suppress("UNCHECKED_CAST")
     fun <T> Response.toBean(clazz: Class<T>): T? {
         if (clazz.isAssignableFrom(String::class.java)) {
-            return this.body?.string() as T
+            return kotlin.runCatching {
+                this.body?.string()
+            }.getOrNull() as T
         }
         return kotlin.runCatching {
             gson.fromJson(this.body?.string(), clazz)
@@ -211,7 +222,5 @@ object KtHttp {
             e.printStackTrace()
         }.getOrNull()
     }
-
-
 }
  
