@@ -36,7 +36,7 @@ object KtHttp {
     private var baseUrl: String? = null
 
     //okHttpClient对象构建配置
-    private val defalutClient = OkHttpClient.Builder()
+    private val defaultBuilder = OkHttpClient.Builder()
         .callTimeout(10, TimeUnit.SECONDS)//完整请求超时时长，从发起到接收返回数据，默认值0，不限定,
         .connectTimeout(10, TimeUnit.SECONDS)//与服务器建立连接的时长，默认10s
         .readTimeout(10, TimeUnit.SECONDS)//读取服务器返回数据的时长
@@ -46,9 +46,9 @@ object KtHttp {
         .addNetworkInterceptor(KtHttpLogInterceptor {
             logLevel(KtHttpLogInterceptor.LogLevel.BODY)
         })//添加网络拦截器，可以对okhttp的网络请求做拦截处理，不同于应用拦截器，这里能感知所有网络状态，比如重定向。
-        .build()
 
-    private var okClient = defalutClient
+    private var mBuilder = defaultBuilder
+    private var okHttpClient: OkHttpClient? = null
 
     //gson对象，免得每次都创建
     private val gson = Gson()
@@ -56,16 +56,20 @@ object KtHttp {
     /**
      * 获取okHttpClient对象
      */
-    fun getClient() = okClient
+    fun getBuilder() = mBuilder
 
     /**
      * 配置server的根url地址,也可以自定义okClient
      * [baseUrl] 项目接口的baseUrl
      * [builder] 函数参数，创建okHttpClient对象
      */
-    fun initConfig(@NonNull baseUrl: String, builder: () -> OkHttpClient = { okClient }): KtHttp {
+    fun initConfig(
+        @NonNull baseUrl: String,
+        builder: OkHttpClient.Builder = defaultBuilder
+    ): KtHttp {
         KtHttp.baseUrl = baseUrl
-        okClient = builder.invoke()
+        mBuilder = builder
+        okHttpClient = mBuilder.build()
         return this
     }
 
@@ -150,12 +154,14 @@ object KtHttp {
      * [params] get请求的参数key，value的map对象，个别情况的请求params可为空
      */
     fun get(path: String, params: Map<String, String>? = null) = runBlocking {
-        okClient.newCall(
+        okHttpClient
+            ?: throw UninitializedPropertyAccessException("OkHttpClient尚未初始化,请调用initConfig之后再请求操作!!!")
+        okHttpClient?.newCall(
             buildGetRequest(
                 path,
                 params
             )
-        ).call()
+        )?.call()
     }
 
     /**
@@ -164,12 +170,14 @@ object KtHttp {
      * [body] post请求的数据对象,个别情况的请求body可为空
      */
     fun post(path: String, body: Any? = null) = runBlocking {
-        okClient.newCall(
+        okHttpClient
+            ?: throw UninitializedPropertyAccessException("OkHttpClient尚未初始化,请调用initConfig之后再请求操作!!!")
+        okHttpClient?.newCall(
             buildJsonPost(
                 body,
                 path
             )
-        ).call()
+        )?.call()
     }
 
     /**
