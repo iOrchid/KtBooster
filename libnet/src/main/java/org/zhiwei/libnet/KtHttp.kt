@@ -40,6 +40,9 @@ object KtHttp {
     //url的配置 以/结尾，而path就不用/开始了
     private var baseUrl: String? = null
 
+    //请求对象的map，用于取消
+    val callMap = hashMapOf<Any?, Call>()
+
     //okHttpClient对象构建配置
     private var defaultClient = OkHttpClient.Builder()
         .callTimeout(10, TimeUnit.SECONDS)//完整请求超时时长，从发起到接收返回数据，默认值0，不限定,
@@ -64,14 +67,14 @@ object KtHttp {
     /**
      * 配置server的根url地址,也可以自定义okClient
      * [baseUrl] 项目接口的baseUrl
-     * [builder] 函数参数，创建okHttpClient对象
+     * [client] 函数参数，创建okHttpClient对象
      */
     fun initConfig(
         @NonNull baseUrl: String,
         client: () -> OkHttpClient = { defaultClient }
     ): KtHttp {
-        KtHttp.baseUrl = baseUrl
-        defaultClient = client.invoke()
+        this.baseUrl = baseUrl
+        this.defaultClient = client.invoke()
         return this
     }
 
@@ -156,26 +159,38 @@ object KtHttp {
      * [params] get请求的参数key，value的map对象，个别情况的请求params可为空
      */
     fun get(path: String, params: Map<String, String>? = null) = runBlocking {
-        defaultClient.newCall(
-            buildGetRequest(
+        kotlin.runCatching {
+            val request = buildGetRequest(
                 path,
                 params
             )
-        ).call()
+            val newCall = okClient.newCall(request)
+            callMap[request.tag()] = newCall
+
+            newCall.call()
+        }.onFailure {
+            it.printStackTrace()
+        }.getOrNull()
     }
 
     /**
      * get请求 返回LiveData
      * [path] 基于baseUrl之后的请求path，
      * [params] get请求的参数key，value的map对象，个别情况的请求params可为空
+     * 可能会有异常，比如断网，超时之类的
      */
-    inline fun <reified T> get(path: String, params: Map<String, String>? = null): LiveData<T?> {
-        return okClient.newCall(
-            buildGetRequest(
+    inline fun <reified T> get(path: String, params: Map<String, String>? = null): LiveData<T?>? {
+        return kotlin.runCatching {
+            val request = buildGetRequest(
                 path,
                 params
             )
-        ).toLiveData<T>()
+            val newCall = okClient.newCall(request)
+            this.callMap[request.tag()] = newCall
+            newCall
+        }.onFailure {
+            it.printStackTrace()
+        }.getOrNull()?.toLiveData<T>()
     }
 
     /**
@@ -184,26 +199,48 @@ object KtHttp {
      * [body] post请求的数据对象,个别情况的请求body可为空
      */
     fun post(path: String, body: Any? = null) = runBlocking {
-        defaultClient.newCall(
-            buildJsonPost(
-                path,
-                body
-            )
-        ).call()
+        kotlin.runCatching {
+            val request = buildJsonPost(path, body)
+            val newCall = okClient.newCall(request)
+            callMap[request.tag()] = newCall
+            newCall.call()
+        }.onFailure {
+            it.printStackTrace()
+        }.getOrNull()
     }
 
     /**
      * post请求 返回liveData形式
      * [path] 基于baseUrl之后的请求path，
      * [body] post请求的数据对象,个别情况的请求body可为空
+     * 可能会有异常，比如断网，超时之类的
      */
-    inline fun <reified T> post(path: String, body: Any? = null): LiveData<T?> {
-        return okClient.newCall(
-            buildJsonPost(
-                path,
-                body
-            )
-        ).toLiveData<T>()
+    inline fun <reified T> post(path: String, body: Any? = null): LiveData<T?>? {
+        return kotlin.runCatching {
+            val request = buildJsonPost(path, body)
+            val newCall = okClient.newCall(request)
+            callMap[request.tag()] = newCall
+            newCall
+        }.onFailure {
+            it.printStackTrace()
+        }.getOrNull()?.toLiveData<T>()
+    }
+
+
+    /**
+     * 取消网络请求，tag就是每次请求的id 标记，也就是请求的传参
+     */
+    fun cancel(tag: Any) {
+        callMap[tag]?.cancel()
+    }
+
+    /**
+     * 取消所有网络请求
+     */
+    fun cancelAll() {
+        callMap.forEach {
+            it.value.cancel()
+        }
     }
 
     /**

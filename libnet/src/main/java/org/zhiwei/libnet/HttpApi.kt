@@ -4,6 +4,7 @@ import android.net.Uri
 import android.util.Log
 import androidx.annotation.NonNull
 import androidx.annotation.Nullable
+import androidx.collection.SimpleArrayMap
 import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
 import okhttp3.*
@@ -11,6 +12,7 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.zhiwei.libnet.config.KtHttpLogInterceptor
 import org.zhiwei.libnet.config.RetryInterceptor
+import org.zhiwei.libnet.support.IHttpCallback
 import java.io.IOException
 import java.util.concurrent.TimeUnit
 
@@ -29,19 +31,26 @@ import java.util.concurrent.TimeUnit
  * You never know what you can do until you try !
  * ----------------------------------------------------------------
  * 简单配置的OkHttp封装，用于项目网络请求
- * todo 1、管理状态，取消；2、协程配合，retrofit；3、完善封装特性；
+ * todo 1、管理状态，取消；2、完善封装特性；
  */
 object HttpApi {
 
     private const val TAG = "HttpApi"
 
-    var maxRetry = 0//最大重试 次数
+    //存储请求，用于取消
+    private val callMap = SimpleArrayMap<Any, Call>()
 
-    //url的配置 以/结尾，erpath就不用/开始了
+
+    //gson对象，免得每次都创建
+    private val gson = Gson()
+
+    //url的配置 以/结尾，而path就不用/开始了
     private var baseUrl: String? = null
 
+    var maxRetry = 0//最大重试 次数
+
     //okHttpClient对象构建配置
-    private val defaultBuilder = OkHttpClient.Builder()
+    private var defaultClient = OkHttpClient.Builder()
         .callTimeout(10, TimeUnit.SECONDS)//完整请求超时时长，从发起到接收返回数据，默认值0，不限定,
         .connectTimeout(10, TimeUnit.SECONDS)//与服务器建立连接的时长，默认10s
         .readTimeout(10, TimeUnit.SECONDS)//读取服务器返回数据的时长
@@ -50,35 +59,49 @@ object HttpApi {
         .cookieJar(CookieJar.NO_COOKIES)
         .addNetworkInterceptor(KtHttpLogInterceptor {
             logLevel(KtHttpLogInterceptor.LogLevel.BODY)
-        })//添加网络拦截器，可以对okhttp的网络请求做拦截处理，不同于应用拦截器，这里能感知所有网络状态，比如重定向。
+        })//添加网络拦截器，可以对okHttp的网络请求做拦截处理，不同于应用拦截器，这里能感知所有网络状态，比如重定向。
         .addNetworkInterceptor(RetryInterceptor(maxRetry))
+        .build()
 
-    private var mBuilder = defaultBuilder
-    private var okHttpClient: OkHttpClient? = null
+    //可公开的okHttpClient
+    var okClient = defaultClient
 
-    //gson对象，免得每次都创建
-    private val gson = Gson()
-
-    /**
-     * 获取okHttpClient对象
-     */
-    fun getBuilder() = mBuilder
 
     /**
      * 配置server的根url地址,也可以自定义okClient
      * [baseUrl] 项目接口的baseUrl
-     * [builder] 函数参数，创建okHttpClient对象
+     * [client] 函数参数，创建okHttpClient对象
      */
     fun initConfig(
         @NonNull baseUrl: String,
-        builder: OkHttpClient.Builder = defaultBuilder
+        client: () -> OkHttpClient = { defaultClient }
     ): HttpApi {
         this.baseUrl = baseUrl
-        mBuilder = builder
-        okHttpClient = mBuilder.build()
+        this.defaultClient = client.invoke()
         return this
     }
+
     //region get请求
+
+    /**
+     * get请求服务器数据,同步请求请求，
+     * [data]为map形式的key -- value 请求参数，或者别的形式
+     * 可使用getSync(){} 也可以 直接得到返回结果，再配合toEntity转化为具体的data class
+     */
+    fun getSync(
+        data: Map<String, String>? = null,
+        @NonNull path: String,
+        block: (Response?) -> Unit
+    ): Response? {
+        val request = buildGetRequest(path, data)
+        val newCall = okClient.newCall(request)
+        //记录请求，用于取消
+        callMap.put(request.tag(), newCall)
+        val rsp = newCall.execute()
+        block.invoke(rsp)
+        return rsp
+    }
+
 
     /**
      * get请求服务器数据,异步请求，接口回调形式
@@ -86,10 +109,10 @@ object HttpApi {
      */
     fun get(data: Map<String, String>? = null, @NonNull path: String, callback: IHttpCallback) {
         val request = buildGetRequest(path, data)
-        okHttpClient
-            ?: throw UninitializedPropertyAccessException("OkHttpClient尚未初始化,请调用initConfig之后再请求操作!!!")
-        okHttpClient?.newCall(request)
-            ?.enqueue(callback(callback))
+        val newCall = okClient.newCall(request)
+        //记录请求，用于取消
+        callMap.put(request.tag(), newCall)
+        newCall.enqueue(callback(callback))
     }
 
     /**
@@ -102,10 +125,10 @@ object HttpApi {
         liveData: MutableLiveData<String?>
     ) {
         val request = buildGetRequest(path, data)
-        okHttpClient
-            ?: throw UninitializedPropertyAccessException("OkHttpClient尚未初始化,请调用initConfig之后再请求操作!!!")
-        okHttpClient?.newCall(request)
-            ?.enqueue(liveBack(liveData))
+        val newCall = okClient.newCall(request)
+        //记录请求，用于取消
+        callMap.put(request.tag(), newCall)
+        newCall.enqueue(liveBack(liveData))
     }
 
     /**
@@ -114,15 +137,15 @@ object HttpApi {
      */
     fun get(data: Map<String, String>? = null, @NonNull path: String, method: (String?) -> Unit) {
         val request = buildGetRequest(path, data)
-        okHttpClient
-            ?: throw UninitializedPropertyAccessException("OkHttpClient尚未初始化,请调用initConfig之后再请求操作!!!")
-        okHttpClient?.newCall(request)
-            ?.enqueue(lambdaInvoke(method))
+        val newCall = okClient.newCall(request)
+        //记录请求，用于取消
+        callMap.put(request.tag(), newCall)
+        newCall.enqueue(lambdaInvoke(method))
     }
 
     /**
      * 构建get请求request
-     * [params]用于拼接url中的请求key--value，可以没有
+     * [params]用于拼接url中的请求key--value，可以没有 也是作为本次请求的id tag
      * [path]请求地址path 用于和baseUrl拼接成完整请求url
      */
     private fun buildGetRequest(
@@ -160,15 +183,29 @@ object HttpApi {
     //region post请求，异步 gson方式
 
     /**
+     * post请求服务器数据，同步操作
+     * 可使用postSync(){} 也可以 直接得到返回结果，再配合toEntity转化为具体的data class
+     */
+    fun postSync(any: Any? = null, @NonNull path: String, block: (Response?) -> Unit): Response? {
+        val request = buildJsonPost(any, path)
+        val newCall = okClient.newCall(request)
+        //记录请求，用于取消
+        callMap.put(request.tag(), newCall)
+        val rsp = newCall.execute()
+        block.invoke(rsp)
+        return rsp
+    }
+
+    /**
      * post请求服务器数据，异步请求
      * 普通的接口回调
      */
     fun post(any: Any? = null, @NonNull path: String, callback: IHttpCallback) {
         val request = buildJsonPost(any, path)
-        okHttpClient
-            ?: throw UninitializedPropertyAccessException("OkHttpClient尚未初始化,请调用initConfig之后再请求操作!!!")
-        okHttpClient?.newCall(request)
-            ?.enqueue(callback(callback))
+        val newCall = okClient.newCall(request)
+        //记录请求，用于取消
+        callMap.put(request.tag(), newCall)
+        newCall.enqueue(callback(callback))
     }
 
 
@@ -178,10 +215,11 @@ object HttpApi {
      */
     fun post(any: Any? = null, @NonNull path: String, method: (String?) -> Unit) {
         val request = buildJsonPost(any, path)
-        okHttpClient
-            ?: throw UninitializedPropertyAccessException("OkHttpClient尚未初始化,请调用initConfig之后再请求操作!!!")
-        okHttpClient?.newCall(request)
-            ?.enqueue(lambdaInvoke(method))
+
+        val newCall = okClient.newCall(request)
+        //记录请求，用于取消
+        callMap.put(request.tag(), newCall)
+        newCall.enqueue(lambdaInvoke(method))
     }
 
     /**
@@ -190,17 +228,17 @@ object HttpApi {
      */
     fun post(any: Any? = null, @NonNull path: String, liveData: MutableLiveData<String?>) {
         val request = buildJsonPost(any, path)
-        okHttpClient
-            ?: throw UninitializedPropertyAccessException("OkHttpClient尚未初始化,请调用initConfig之后再请求操作!!!")
-        okHttpClient?.newCall(request)
-            ?.enqueue(liveBack(liveData))
+        val newCall = okClient.newCall(request)
+        //记录请求，用于取消
+        callMap.put(request.tag(), newCall)
+        newCall.enqueue(liveBack(liveData))
     }
 
 
     /**
      * 构建post的请求request
      * [path]请求的service
-     * [any] 请求数据对象
+     * [any] 请求数据对象 也是作为本次请求的id tag
      */
     private fun buildJsonPost(any: Any?, @NonNull path: String): Request {
         checkBaseUrl()
@@ -294,5 +332,21 @@ object HttpApi {
         baseUrl ?: throw IllegalArgumentException("BaseUrl必须要初始化配置正确，方可正常使用HttpApi")
         Uri.parse(baseUrl).scheme
             ?: throw IllegalArgumentException("BaseUrl格式不合法,请检查是否有scheme")
+    }
+
+    /**
+     * 取消网络请求，tag就是每次请求的id 标记，也就是请求的传参
+     */
+    fun cancel(tag: Any) {
+        callMap.get(tag)?.cancel()
+    }
+
+    /**
+     * 取消所有网络请求
+     */
+    fun cancelAll() {
+        for (i in 0 until callMap.size()) {
+            callMap.get(callMap.keyAt(i))?.cancel()
+        }
     }
 }

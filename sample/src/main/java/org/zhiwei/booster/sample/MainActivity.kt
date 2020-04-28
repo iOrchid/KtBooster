@@ -10,8 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.zhiwei.booster.KtActivity
 import org.zhiwei.libcore.LogKt
-import org.zhiwei.libnet.KtHttp
-import org.zhiwei.libnet.support.toEntity
+import org.zhiwei.libnet.HttpApi
 
 class MainActivity : KtActivity() {
 
@@ -25,9 +24,10 @@ class MainActivity : KtActivity() {
                 .setAction("Action", null).show()
             LogKt.i("测试 logKt的打印栈")
             lifecycleScope.launch(Dispatchers.IO) {
-                val toBean = KtHttp.initConfig("http://m.pm25.com/city/")
-                    .get("beijing.html")?.toEntity<String>()
-                LogKt.d("onCreate: $toBean")
+                HttpApi.initConfig("http://m.pm25.com/city/")
+                    .get(emptyMap(), "beijing.html") {
+                        LogKt.d("onCreate: $it")
+                    }
             }
         }
         LogKt.d("tag ddd", "测试 logKt的打印栈")

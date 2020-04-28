@@ -1,4 +1,4 @@
-package org.zhiwei.libnet
+package org.zhiwei.libnet.support
 
 /**
  * 作者： 志威  zhiwei.org

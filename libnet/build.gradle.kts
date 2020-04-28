@@ -33,6 +33,7 @@ dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
     implementation("org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version")
     implementation(DepLibrary.COROUTINES_ANDROID)
+    implementation(DepLibrary.COLLECTION)
     implementation(DepLibrary.LIFECYCLE_LIVEDATA)
     implementation(DepLibrary.LIFECYCLE_LIVEDATA_KTX)
 

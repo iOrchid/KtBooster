@@ -25,6 +25,7 @@ object DepLibrary {
     const val COROUTINES_ANDROID =
         "org.jetbrains.kotlinx:kotlinx-coroutines-android:${VersionExt.coroutines}"
     const val APPCOMPAT = "androidx.appcompat:appcompat:${VersionExt.compat}"
+    const val COLLECTION = "androidx.collection:collection:${VersionExt.collection}"
     const val CORE_KTX = "androidx.core:core-ktx:${VersionExt.androidxCoreKtx}"
     const val FRAGMENT_KTX = "androidx.fragment:fragment-ktx:${VersionExt.fragmentKtx}"
     const val ACTIVITY_KTX = "androidx.activity:activity-ktx:${VersionExt.activityKtx}"
