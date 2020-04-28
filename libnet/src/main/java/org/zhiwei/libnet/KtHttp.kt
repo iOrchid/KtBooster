@@ -3,6 +3,7 @@ package org.zhiwei.libnet
 import android.net.Uri
 import androidx.annotation.NonNull
 import androidx.annotation.Nullable
+import androidx.lifecycle.LiveData
 import com.google.gson.Gson
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.suspendCancellableCoroutine
@@ -10,6 +11,8 @@ import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.zhiwei.libnet.config.KtHttpLogInterceptor
+import org.zhiwei.libnet.config.RetryInterceptor
+import org.zhiwei.libnet.support.toLiveData
 import java.io.IOException
 import java.util.concurrent.TimeUnit
 import kotlin.coroutines.resume
@@ -32,11 +35,13 @@ import kotlin.coroutines.resumeWithException
  */
 object KtHttp {
 
+    var maxRetry = 0//最大重试 次数
+
     //url的配置 以/结尾，而path就不用/开始了
     private var baseUrl: String? = null
 
     //okHttpClient对象构建配置
-    private val defaultBuilder = OkHttpClient.Builder()
+    private var defaultClient = OkHttpClient.Builder()
         .callTimeout(10, TimeUnit.SECONDS)//完整请求超时时长，从发起到接收返回数据，默认值0，不限定,
         .connectTimeout(10, TimeUnit.SECONDS)//与服务器建立连接的时长，默认10s
         .readTimeout(10, TimeUnit.SECONDS)//读取服务器返回数据的时长
@@ -46,17 +51,15 @@ object KtHttp {
         .addNetworkInterceptor(KtHttpLogInterceptor {
             logLevel(KtHttpLogInterceptor.LogLevel.BODY)
         })//添加网络拦截器，可以对okhttp的网络请求做拦截处理，不同于应用拦截器，这里能感知所有网络状态，比如重定向。
+        .addNetworkInterceptor(RetryInterceptor(maxRetry))
+        .build()
 
-    private var mBuilder = defaultBuilder
-    private var okHttpClient: OkHttpClient? = null
+    //可公开的okHttpClient
+    var okClient = defaultClient
 
     //gson对象，免得每次都创建
     private val gson = Gson()
 
-    /**
-     * 获取okHttpClient对象
-     */
-    fun getBuilder() = mBuilder
 
     /**
      * 配置server的根url地址,也可以自定义okClient
@@ -65,11 +68,10 @@ object KtHttp {
      */
     fun initConfig(
         @NonNull baseUrl: String,
-        builder: OkHttpClient.Builder = defaultBuilder
+        client: () -> OkHttpClient = { defaultClient }
     ): KtHttp {
         KtHttp.baseUrl = baseUrl
-        mBuilder = builder
-        okHttpClient = mBuilder.build()
+        defaultClient = client.invoke()
         return this
     }
 
@@ -81,7 +83,7 @@ object KtHttp {
      * [params]用于拼接url中的请求key--value，可以没有
      * [path]请求地址path 用于和baseUrl拼接成完整请求url
      */
-    private fun buildGetRequest(
+    fun buildGetRequest(
         @NonNull path: String,
         @Nullable params: Map<String, String>? = null
     ): Request {
@@ -116,7 +118,7 @@ object KtHttp {
      * [path]请求的service
      * [body] 请求数据对象
      */
-    private fun buildJsonPost(body: Any?, @NonNull path: String): Request {
+    fun buildJsonPost(@NonNull path: String, body: Any?): Request {
         checkBaseUrl()
         val url = if (path.startsWith(
                 "http://",
@@ -141,7 +143,7 @@ object KtHttp {
      */
     private fun checkBaseUrl() {
         //如果baseUrl没有配置，则抛异常，提示,后期可以更严格的正则匹配url为合法网址
-        baseUrl ?: throw IllegalArgumentException("BaseUrl必须要初始化配置正确，方可正常使用HttpApi")
+        baseUrl ?: throw IllegalArgumentException("BaseUrl必须要初始化配置正确，方可正常使用KtHttp")
         Uri.parse(baseUrl).scheme
             ?: throw IllegalArgumentException("BaseUrl格式不合法,请检查是否有scheme")
     }
@@ -154,14 +156,26 @@ object KtHttp {
      * [params] get请求的参数key，value的map对象，个别情况的请求params可为空
      */
     fun get(path: String, params: Map<String, String>? = null) = runBlocking {
-        okHttpClient
-            ?: throw UninitializedPropertyAccessException("OkHttpClient尚未初始化,请调用initConfig之后再请求操作!!!")
-        okHttpClient?.newCall(
+        defaultClient.newCall(
             buildGetRequest(
                 path,
                 params
             )
-        )?.call()
+        ).call()
+    }
+
+    /**
+     * get请求 返回LiveData
+     * [path] 基于baseUrl之后的请求path，
+     * [params] get请求的参数key，value的map对象，个别情况的请求params可为空
+     */
+    inline fun <reified T> get(path: String, params: Map<String, String>? = null): LiveData<T?> {
+        return okClient.newCall(
+            buildGetRequest(
+                path,
+                params
+            )
+        ).toLiveData<T>()
     }
 
     /**
@@ -170,14 +184,26 @@ object KtHttp {
      * [body] post请求的数据对象,个别情况的请求body可为空
      */
     fun post(path: String, body: Any? = null) = runBlocking {
-        okHttpClient
-            ?: throw UninitializedPropertyAccessException("OkHttpClient尚未初始化,请调用initConfig之后再请求操作!!!")
-        okHttpClient?.newCall(
+        defaultClient.newCall(
             buildJsonPost(
-                body,
-                path
+                path,
+                body
             )
-        )?.call()
+        ).call()
+    }
+
+    /**
+     * post请求 返回liveData形式
+     * [path] 基于baseUrl之后的请求path，
+     * [body] post请求的数据对象,个别情况的请求body可为空
+     */
+    inline fun <reified T> post(path: String, body: Any? = null): LiveData<T?> {
+        return okClient.newCall(
+            buildJsonPost(
+                path,
+                body
+            )
+        ).toLiveData<T>()
     }
 
     /**
@@ -210,25 +236,6 @@ object KtHttp {
                 }
             }
         }
-    }
-
-    /**
-     * 将Response的对象，转化为需要的对象类型，也就是将body.string转为bean
-     * [clazz] 待转化的对象类型
-     * @return 返回需要的类型对象，可能为null，如果json解析失败的话
-     */
-    @Suppress("UNCHECKED_CAST")
-    fun <T> Response.toBean(clazz: Class<T>): T? {
-        if (clazz.isAssignableFrom(String::class.java)) {
-            return kotlin.runCatching {
-                this.body?.string()
-            }.getOrNull() as T
-        }
-        return kotlin.runCatching {
-            gson.fromJson(this.body?.string(), clazz)
-        }.onFailure { e ->
-            e.printStackTrace()
-        }.getOrNull()
     }
 }
  

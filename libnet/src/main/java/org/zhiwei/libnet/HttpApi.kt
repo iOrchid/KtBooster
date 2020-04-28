@@ -10,6 +10,7 @@ import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.zhiwei.libnet.config.KtHttpLogInterceptor
+import org.zhiwei.libnet.config.RetryInterceptor
 import java.io.IOException
 import java.util.concurrent.TimeUnit
 
@@ -34,6 +35,7 @@ object HttpApi {
 
     private const val TAG = "HttpApi"
 
+    var maxRetry = 0//最大重试 次数
 
     //url的配置 以/结尾，erpath就不用/开始了
     private var baseUrl: String? = null
@@ -49,6 +51,7 @@ object HttpApi {
         .addNetworkInterceptor(KtHttpLogInterceptor {
             logLevel(KtHttpLogInterceptor.LogLevel.BODY)
         })//添加网络拦截器，可以对okhttp的网络请求做拦截处理，不同于应用拦截器，这里能感知所有网络状态，比如重定向。
+        .addNetworkInterceptor(RetryInterceptor(maxRetry))
 
     private var mBuilder = defaultBuilder
     private var okHttpClient: OkHttpClient? = null

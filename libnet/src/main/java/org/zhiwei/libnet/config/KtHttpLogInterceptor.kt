@@ -82,7 +82,8 @@ class KtHttpLogInterceptor(block: (KtHttpLogInterceptor.() -> Unit)? = null) : I
      */
     private fun logRequest(request: Request, connection: Connection?) {
         val sb = StringBuilder()
-        sb.append(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+        sb.appendln()
+        sb.appendln(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
         when (logLevel) {
             LogLevel.NONE -> {
                 /*do nothing*/
@@ -101,7 +102,7 @@ class KtHttpLogInterceptor(block: (KtHttpLogInterceptor.() -> Unit)? = null) : I
                     "请求 Header: {${header.first}=${header.second}}\n"
                 }
                 sb.appendln(headersStr)
-                    .appendln(request.body)
+                    .appendln("request Body: request.body")
             }
         }
         sb.append(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
@@ -114,13 +115,14 @@ class KtHttpLogInterceptor(block: (KtHttpLogInterceptor.() -> Unit)? = null) : I
      */
     private fun logResponse(response: Response) {
         val sb = StringBuilder()
-        sb.append("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
+        sb.appendln()
+        sb.appendln("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
         when (logLevel) {
             LogLevel.NONE -> {
                 /*do nothing*/
             }
             LogLevel.BASIC -> {
-                sb.appendln("响应 protocol: ${response.protocol} code: ${response.code} message: ${response.message} url: ${response.request.url}")
+                sb.appendln("响应 protocol: ${response.protocol} code: ${response.code} message: ${response.message} url: ${response.request.url} ${response.headers}")
                 sb.appendln(
                     "响应 sentRequestTime: ${toDateTimeStr(
                         response.sentRequestAtMillis,
@@ -142,10 +144,9 @@ class KtHttpLogInterceptor(block: (KtHttpLogInterceptor.() -> Unit)? = null) : I
                     "响应 Header: {${header.first}=${header.second}}\n"
                 }
                 sb.appendln(headersStr)
-                val bodyStr = kotlin.runCatching {
-                    response.body?.string()
+                kotlin.runCatching {
+                    sb.appendln(response.toString())
                 }.getOrNull()
-                sb.appendln(bodyStr)
             }
         }
         sb.append("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
