@@ -73,6 +73,20 @@ fun Activity.statusBar(@ColorInt color: Int) {
     window.statusBarColor = color
 }
 
+/**
+ * 设置沉浸式状态栏,这样就可以使得顶部的图片之类的，能显示于状态栏之内，
+ * 注意使用放在setContentView之前
+ */
+fun Activity.immediateStatusBar() {
+    window.apply {
+        addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN)
+        addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+        addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
+        decorView.systemUiVisibility =
+            View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+    }
+}
+
 
 /**
  * 关闭软键盘
