@@ -81,6 +81,7 @@ fun Activity.immediateStatusBar() {
     window.apply {
         addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN)
         addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+        //前两个也可以不用，关键是这个no limit
         addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
         decorView.systemUiVisibility =
             View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE

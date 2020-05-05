@@ -53,14 +53,14 @@ object KtHttp {
         .cookieJar(CookieJar.NO_COOKIES)
         .addNetworkInterceptor(KtHttpLogInterceptor {
             logLevel(KtHttpLogInterceptor.LogLevel.BODY)
-        })//添加网络拦截器，可以对okhttp的网络请求做拦截处理，不同于应用拦截器，这里能感知所有网络状态，比如重定向。
+        })//添加网络拦截器，可以对okHttp的网络请求做拦截处理，不同于应用拦截器，这里能感知所有网络状态，比如重定向。
         .addNetworkInterceptor(RetryInterceptor(maxRetry))
         .build()
 
     //可公开的okHttpClient
     var okClient = defaultClient
 
-    //gson对象，免得每次都创建
+    //Gson对象，免得每次都创建
     private val gson = Gson()
 
 
@@ -273,6 +273,18 @@ object KtHttp {
                 }
             }
         }
+    }
+
+
+    fun Response.serial(vararg block: () -> Response?) {
+
+    }
+
+    /**
+     * 并行请求，执行多个请求，放在同一代码块
+     */
+    fun parallel(block: KtHttp.() -> Unit) {
+        block.invoke(this)
     }
 }
  
