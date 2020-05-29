@@ -275,13 +275,16 @@ object KtHttp {
         }
     }
 
-
+    /**
+     * 设计目标是，接口串行，依次依赖请求结果，并最终返回结果，或者异常、错误。
+     */
     fun Response.serial(vararg block: () -> Response?) {
 
     }
 
     /**
-     * 并行请求，执行多个请求，放在同一代码块
+     * 设计目标是，并行请求，执行多个请求，放在同一代码块,并且合并流结果，最后一个接口响应后，才返回结果
+     * [block]并行请求的代码块
      */
     fun parallel(block: KtHttp.() -> Unit) {
         block.invoke(this)

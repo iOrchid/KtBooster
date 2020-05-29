@@ -20,6 +20,7 @@ import androidx.collection.SimpleArrayMap
  * https://github.com/Blankj/AndroidUtilCode
  */
 object PinyinKt {
+
     /**
      * 汉字转拼音
      *
@@ -279,4 +280,17 @@ object PinyinKt {
             )
             .append("xie   yue   ").toString()
     }
+
+    /**
+     * 判断字符串内是否有中文
+     * [charSequence] 待匹配字符串
+     */
+    fun hasCnChar(charSequence: CharSequence): Boolean {
+        return charSequence.any {
+            it.toInt() in 0x4E00..0x9FA5
+        }
+    }
+
+
+
 }

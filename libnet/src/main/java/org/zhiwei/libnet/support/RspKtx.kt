@@ -138,28 +138,12 @@ suspend fun <T : Any> Call<T>.serverRsp(): ApiResponse<T> {
 /**
  * 扩展用于处理网络返回数据结果 成功的回调
  */
-inline fun <R> DataResult<R>.onOK(
+inline fun <R> DataResult<R>.onOKError(
     onOK: (DataResult.Success<R>) -> Unit
 ) {
     when (this) {
         is DataResult.Success -> {
             onOK.invoke(this)
-        }
-        else -> {
-            //loading状态，或者其他
-        }
-    }
-}
-
-/**
- * 扩展用于处理网络返回数据结果 成功的回调
- */
-inline fun <R> DataResult<R>.onFailed(
-    onFail: (DataResult.Error) -> Unit
-) {
-    when (this) {
-        is DataResult.Error -> {
-            onFail.invoke(this)
         }
         else -> {
             //loading状态，或者其他
