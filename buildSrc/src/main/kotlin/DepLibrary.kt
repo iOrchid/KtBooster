@@ -29,16 +29,22 @@ object DepLibrary {
     const val CORE_KTX = "androidx.core:core-ktx:${VersionExt.androidxCoreKtx}"
     const val FRAGMENT_KTX = "androidx.fragment:fragment-ktx:${VersionExt.fragmentKtx}"
     const val ACTIVITY_KTX = "androidx.activity:activity-ktx:${VersionExt.activityKtx}"
-
+    const val COLLECTION_KTX = "androidx.collection:collection-ktx:${VersionExt.collection}"
+    const val PALETTE_KTX = "androidx.palette:palette-ktx:${VersionExt.paletteKtx}"
+    const val SQLITE_KTX = "androidx.sqlite:sqlite-ktx:${VersionExt.sqliteKtx}"
     const val MATERIAL = "com.google.android.material:material:${VersionExt.material}"
+
     const val CONSTRAINT_LAYOUT =
         "androidx.constraintlayout:constraintlayout:${VersionExt.constraint}"
     const val RECYCLER_VIEW = "androidx.recyclerview:recyclerview:${VersionExt.recyclerView}"
-    //</editor-folder>
-
 
     //<editor-folder desc="Jetpack配置Libs">
     const val LIFECYCLE_LIVEDATA = "androidx.lifecycle:lifecycle-livedata:${VersionExt.lifecycle}"
+
+
+    //</editor-folder>
+    const val LIFECYCLE_RX_STREAM_KTX =
+        "androidx.lifecycle:lifecycle-reactivestreams-ktx:${VersionExt.lifecycle}"
     const val LIFECYCLE_VIEWMODEL = "androidx.lifecycle:lifecycle-viewmodel:${VersionExt.lifecycle}"
     const val LIFECYCLE_RUNTIME = "androidx.lifecycle:lifecycle-runtime:${VersionExt.lifecycle}"
     const val LIFECYCLE_LIVEDATA_KTX =

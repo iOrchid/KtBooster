@@ -33,11 +33,13 @@ object VersionExt {
     //region android platform
     internal const val coroutines = "1.3.8"
     internal const val compat = "1.1.0"
+    internal const val paletteKtx = "1.0.0"
     internal const val collection = "1.1.0"
     internal const val androidxCoreKtx = "1.2.0"
     internal const val fragmentKtx = "1.2.4"
     internal const val activityKtx = "1.1.0"
     internal const val material = "1.1.0"
+    internal const val sqliteKtx = "2.1.0"
     internal const val constraint = "2.0.0-beta8"
     internal const val recyclerView = "1.1.0"
     //endregion
