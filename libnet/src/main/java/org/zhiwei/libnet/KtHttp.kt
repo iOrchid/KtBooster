@@ -103,6 +103,8 @@ object KtHttp {
             with(sb) {
                 append("$url?")
                 params.forEach { item ->
+                    //key value 不都是空字符的时候添加
+                    if (item.key.isNotEmpty())
                     append("${item.key}=${item.value}&")
                 }
             }
@@ -179,7 +181,10 @@ object KtHttp {
      * [params] get请求的参数key，value的map对象，个别情况的请求params可为空
      * 可能会有异常，比如断网，超时之类的
      */
-    inline fun <reified T> get(path: String, params: Map<String, String>? = null): LiveData<T?>? {
+    inline fun <reified T> get(
+        path: String,
+        params: Map<String, String>? = null
+    ): LiveData<T?>? {
         return kotlin.runCatching {
             val request = buildGetRequest(
                 path,

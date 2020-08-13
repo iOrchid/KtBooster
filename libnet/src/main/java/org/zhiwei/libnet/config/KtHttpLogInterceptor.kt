@@ -2,6 +2,7 @@ package org.zhiwei.libnet.config
 
 import android.util.Log
 import okhttp3.*
+import java.net.URLDecoder
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -82,75 +83,122 @@ class KtHttpLogInterceptor(block: (KtHttpLogInterceptor.() -> Unit)? = null) : I
      */
     private fun logRequest(request: Request, connection: Connection?) {
         val sb = StringBuilder()
-        sb.appendln()
-        sb.appendln(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+        sb.appendln("\r\n")
+        sb.appendln("->->->->->->->->->->->->->->->->->->->->->->->->->->->->->->->->->->->->->->->->")
         when (logLevel) {
             LogLevel.NONE -> {
                 /*do nothing*/
             }
             LogLevel.BASIC -> {
-                sb.appendln("请求 method: ${request.method} url: ${request.url} tag: ${request.tag()} protocol: ${connection?.protocol() ?: Protocol.HTTP_1_1}")
+                logBasicReq(sb, request, connection)
             }
             LogLevel.HEADERS -> {
-                val headersStr = request.headers.joinToString { header ->
-                    "请求 Header: {${header.first}=${header.second}}\n"
-                }
-                sb.appendln(headersStr)
+                logHeadersReq(sb, request, connection)
             }
             LogLevel.BODY -> {
-                val headersStr = request.headers.joinToString { header ->
-                    "请求 Header: {${header.first}=${header.second}}\n"
-                }
-                sb.appendln(headersStr)
-                    .appendln("request Body: request.body")
+                logBodyReq(sb, request, connection)
             }
         }
-        sb.append(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+        sb.appendln("->->->->->->->->->->->->->->->->->->->->->->->->->->->->->->->->->->->->->->->->->->->->->->->->->->->->->->->->->->->->->->->->->->->->->->")
         logIt(sb)
     }
+
+    //region log  request
+
+    private fun logBodyReq(
+        sb: StringBuilder,
+        request: Request,
+        connection: Connection?
+    ) {
+        logHeadersReq(sb, request, connection)
+        sb.appendln("RequestBody: ${request.body.toString()}")
+    }
+
+    private fun logHeadersReq(
+        sb: StringBuilder,
+        request: Request,
+        connection: Connection?
+    ) {
+        logBasicReq(sb, request, connection)
+        val headersStr = request.headers.joinToString("") { header ->
+            "请求 Header: {${header.first}=${header.second}}\n"
+        }
+        sb.appendln(headersStr)
+    }
+
+    private fun logBasicReq(
+        sb: StringBuilder,
+        request: Request,
+        connection: Connection?
+    ) {
+        sb.appendln("请求 method: ${request.method} url: ${decodeUrlStr(request.url.toString())} tag: ${request.tag()} protocol: ${connection?.protocol() ?: Protocol.HTTP_1_1}")
+    }
+
+    //endregion
 
     /**
      * 记录响应日志
      * [response] 响应数据
      */
     private fun logResponse(response: Response) {
-        val sb = StringBuilder()
-        sb.appendln()
-        sb.appendln("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
+        val sb = StringBuffer()
+        sb.appendln("\r\n")
+        sb.appendln("<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<")
         when (logLevel) {
             LogLevel.NONE -> {
                 /*do nothing*/
             }
             LogLevel.BASIC -> {
-                sb.appendln("响应 protocol: ${response.protocol} code: ${response.code} message: ${response.message} url: ${response.request.url} ${response.headers}")
-                sb.appendln(
-                    "响应 sentRequestTime: ${toDateTimeStr(
-                        response.sentRequestAtMillis,
-                        MILLIS_PATTERN
-                    )} receivedResponseTime: ${toDateTimeStr(
-                        response.receivedResponseAtMillis,
-                        MILLIS_PATTERN
-                    )}"
-                )
+                logBasicRsp(sb, response)
             }
             LogLevel.HEADERS -> {
-                val headersStr = response.headers.joinToString { header ->
-                    "响应 Header: {${header.first}=${header.second}}\n"
-                }
-                sb.appendln(headersStr)
+                logHeadersRsp(response, sb)
             }
             LogLevel.BODY -> {
-                val headersStr = response.headers.joinToString { header ->
-                    "响应 Header: {${header.first}=${header.second}}\n"
-                }
-                sb.appendln(headersStr)
+                logHeadersRsp(response, sb)
                 kotlin.runCatching {
-                    sb.appendln(response.toString())
+                    //添加返回数据，不能直接body.string，这样会消费掉数据，使得后面无法接收响应
+                    sb.appendln(response.body.toString())
                 }.getOrNull()
             }
         }
-        sb.append("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
-        logIt(sb)
+        sb.appendln("<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<-<<")
+        logIt(sb, ColorLevel.INFO)
+    }
+
+    //region log response
+
+    private fun logHeadersRsp(response: Response, sb: StringBuffer) {
+        logBasicRsp(sb, response)
+        val headersStr = response.headers.joinToString(separator = "") { header ->
+            "响应 Header: {${header.first}=${header.second}}\n"
+        }
+        sb.appendln(headersStr)
+    }
+
+    private fun logBasicRsp(sb: StringBuffer, response: Response) {
+        sb.appendln("响应 protocol: ${response.protocol} code: ${response.code} message: ${response.message}")
+            .appendln("响应 request Url: ${decodeUrlStr(response.request.url.toString())}")
+            .appendln(
+                "响应 sentRequestTime: ${toDateTimeStr(
+                    response.sentRequestAtMillis,
+                    MILLIS_PATTERN
+                )} receivedResponseTime: ${toDateTimeStr(
+                    response.receivedResponseAtMillis,
+                    MILLIS_PATTERN
+                )}"
+            )
+    }
+
+    //endregion
+
+    /**
+     * 对于url编码的string 解码
+     */
+    private fun decodeUrlStr(url: String): String? {
+        return kotlin.runCatching {
+            URLDecoder.decode(url, "utf-8")
+        }.onFailure { it.printStackTrace() }.getOrNull()
     }
 
     /**

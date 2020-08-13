@@ -31,14 +31,14 @@ const val navigation = "2.2.1"//navigation 版本号，需要在dependencies和c
 object VersionExt {
 
     //region android platform
-    internal const val coroutines = "1.3.5"
+    internal const val coroutines = "1.3.8"
     internal const val compat = "1.1.0"
     internal const val collection = "1.1.0"
     internal const val androidxCoreKtx = "1.2.0"
     internal const val fragmentKtx = "1.2.4"
     internal const val activityKtx = "1.1.0"
     internal const val material = "1.1.0"
-    internal const val constraint = "2.0.0-beta4"
+    internal const val constraint = "2.0.0-beta8"
     internal const val recyclerView = "1.1.0"
     //endregion
 
@@ -50,10 +50,10 @@ object VersionExt {
     //endregion
 
     //region Github excellence project
-    internal const val retrofit = "2.8.1"
+    internal const val retrofit = "2.9.0"
     internal const val gson = "2.8.6"
-    internal const val okhttp = "4.4.0"
-    internal const val mmkv = "1.1.1"
+    internal const val okhttp = "4.8.0"
+    internal const val mmkv = "1.2.1"
 
     //endregion
 
