@@ -8,6 +8,7 @@ import androidx.collection.SimpleArrayMap
 import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
 import okhttp3.*
+import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.zhiwei.libnet.config.KtHttpLogInterceptor
@@ -154,21 +155,26 @@ object HttpApi {
     ): Request {
         checkBaseUrl()
         //便于对不是baseUrl的链接做接受;下面的处理方式可能不是最佳，也可以方法签名中默认参数flag标记是否独立url
-        var url = if (path.startsWith(
+        val url = if (path.startsWith(
                 "http://",
                 true
             ) || path.startsWith("Https://")
         ) path else "$baseUrl$path"
         //有get请求参数
-        if (!params.isNullOrEmpty()) {
-            val sb = StringBuilder()
-            with(sb) {
-                append("$url?")
-                params.forEach { item ->
-                    append("${item.key}=${item.value}&")
-                }
-            }
-            url = sb.toString().dropLast(1)//上面的拼接，会在最后多一个&符号，所去掉
+//        if (!params.isNullOrEmpty()) {
+//            val sb = StringBuilder()
+//            with(sb) {
+//                append("$url?")
+//                params.forEach { item ->
+//                    append("${item.key}=${item.value}&")
+//                }
+//            }
+//            url = sb.toString().dropLast(1)//上面的拼接，会在最后多一个&符号，所去掉
+//        }
+        //使用合理的拼接参数的方式，而不是sb的方式
+        val urlBuilder = url.toHttpUrl().newBuilder()
+        params?.forEach { item ->
+            urlBuilder.addEncodedQueryParameter(item.key, item.value.toString())
         }
         return Request.Builder()
             .url(url)

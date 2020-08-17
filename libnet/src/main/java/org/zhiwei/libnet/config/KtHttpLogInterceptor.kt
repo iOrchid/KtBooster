@@ -156,9 +156,11 @@ class KtHttpLogInterceptor(block: (KtHttpLogInterceptor.() -> Unit)? = null) : I
             }
             LogLevel.BODY -> {
                 logHeadersRsp(response, sb)
+                //body.string会抛IO异常
                 kotlin.runCatching {
-                    //添加返回数据，不能直接body.string，这样会消费掉数据，使得后面无法接收响应
-                    sb.appendln(response.body.toString())
+                    //peek类似于clone数据流，监视，窥探,不能直接用原来的body的string流数据作为日志，会消费掉io，所以这里是peek，监测
+                    val peekBody = response.peekBody(1024 * 1024)
+                    sb.appendln(peekBody.string())
                 }.getOrNull()
             }
         }
