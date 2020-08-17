@@ -35,20 +35,24 @@ object VersionExt {
     internal const val compat = "1.1.0"
     internal const val paletteKtx = "1.0.0"
     internal const val collection = "1.1.0"
-    internal const val androidxCoreKtx = "1.2.0"
+    internal const val androidxCoreKtx = "1.3.1"
     internal const val fragmentKtx = "1.2.4"
     internal const val activityKtx = "1.1.0"
     internal const val material = "1.1.0"
     internal const val sqliteKtx = "2.1.0"
     internal const val constraint = "2.0.0-beta8"
     internal const val recyclerView = "1.1.0"
+
+    internal const val concurrentFutures = "1.0.0"
+    internal const val concurrentFuturesKtx = "1.1.0-rc01"
+
     //endregion
 
     //region jetPack
     internal const val lifecycle = "2.2.0"
     internal const val room = "2.2.5"
     internal const val paging = "2.1.2"
-    internal const val work = "2.3.4"
+    internal const val work = "2.4.0"
     //endregion
 
     //region Github excellence project

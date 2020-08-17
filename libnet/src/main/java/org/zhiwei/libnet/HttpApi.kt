@@ -14,6 +14,7 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import org.zhiwei.libnet.config.KtHttpLogInterceptor
 import org.zhiwei.libnet.config.RetryInterceptor
 import org.zhiwei.libnet.support.IHttpCallback
+import java.io.File
 import java.io.IOException
 import java.util.concurrent.TimeUnit
 
@@ -56,12 +57,16 @@ object HttpApi {
         .connectTimeout(10, TimeUnit.SECONDS)//与服务器建立连接的时长，默认10s
         .readTimeout(10, TimeUnit.SECONDS)//读取服务器返回数据的时长
         .writeTimeout(10, TimeUnit.SECONDS)//向服务器写入数据的时长，默认10s
-        .retryOnConnectionFailure(true)
+        .retryOnConnectionFailure(true)//重连
+        .followRedirects(false)//重定向
+        .cache(Cache(File("sdcard/cache", "okhttpCache"), 1024))//http 的缓存大小，位置
         .cookieJar(CookieJar.NO_COOKIES)
         .addNetworkInterceptor(KtHttpLogInterceptor {
             logLevel(KtHttpLogInterceptor.LogLevel.BODY)
         })//添加网络拦截器，可以对okHttp的网络请求做拦截处理，不同于应用拦截器，这里能感知所有网络状态，比如重定向。
         .addNetworkInterceptor(RetryInterceptor(maxRetry))
+//        .hostnameVerifier()//主机host的校验
+//        .sslSocketFactory(HttpsTools.initSSLSocketFactory(),HttpsTools.initTrustManager())
         .build()
 
     //可公开的okHttpClient

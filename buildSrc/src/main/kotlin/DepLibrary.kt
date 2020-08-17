@@ -32,6 +32,9 @@ object DepLibrary {
     const val COLLECTION_KTX = "androidx.collection:collection-ktx:${VersionExt.collection}"
     const val PALETTE_KTX = "androidx.palette:palette-ktx:${VersionExt.paletteKtx}"
     const val SQLITE_KTX = "androidx.sqlite:sqlite-ktx:${VersionExt.sqliteKtx}"
+    const val CONCURRENT = "androidx.concurrent:concurrent-futures:${VersionExt.concurrentFutures}"
+    const val CONCURRENT_KTX =
+        "androidx.concurrent:concurrent-futures-ktx:${VersionExt.concurrentFuturesKtx}"
     const val MATERIAL = "com.google.android.material:material:${VersionExt.material}"
 
     const val CONSTRAINT_LAYOUT =
