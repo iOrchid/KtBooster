@@ -41,11 +41,7 @@ internal class LocalCookieJar : CookieJar {
         }
 
         //缓存中移除过期的Cookie
-
-        //缓存中移除过期的Cookie
         cache.removeAll(invalidCookies)
-
-        //返回List<Cookie>让Request进行设置
 
         //返回List<Cookie>让Request进行设置
         return validCookies
