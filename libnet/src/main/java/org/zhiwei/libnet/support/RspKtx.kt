@@ -59,6 +59,7 @@ inline fun <reified T> okhttp3.Call.toLiveData(): LiveData<T?> {
  */
 inline fun <reified T> Response.toEntity(): T? {
     if (!isSuccessful) return null
+    //gson不允许我们将json对象采用String,所以单独处理
     if (T::class.java.isAssignableFrom(String::class.java)) {
         return kotlin.runCatching {
             this.body?.string()

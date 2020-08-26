@@ -25,6 +25,7 @@ import javax.net.ssl.*
  *  用于设置okHttp的https支持的工具类
  */
 object HttpsTools {
+
     //对指定证书的信任
     fun getSslSocketFactory(
         certificates: Array<InputStream>,
@@ -65,6 +66,7 @@ object HttpsTools {
                 try {
                     certificate?.close()
                 } catch (e: IOException) {
+                    e.printStackTrace()
                 }
             }
             val trustManagerFactory: TrustManagerFactory =
@@ -114,7 +116,7 @@ object HttpsTools {
     private fun chooseTrustManager(trustManagers: Array<TrustManager>?): X509TrustManager? {
         for (trustManager in trustManagers!!) {
             if (trustManager is X509TrustManager) {
-                return trustManager as X509TrustManager
+                return trustManager
             }
         }
         return null
@@ -130,6 +132,7 @@ object HttpsTools {
             chain: Array<X509Certificate?>?,
             authType: String?
         ) {
+            //client check
         }
 
         @Throws(CertificateException::class)
@@ -191,6 +194,7 @@ object HttpsTools {
                 chain: Array<X509Certificate?>?,
                 authType: String?
             ) {
+                //server check
             }
 
             override fun getAcceptedIssuers() = arrayOf<X509Certificate?>()
@@ -200,6 +204,7 @@ object HttpsTools {
                 chain: Array<X509Certificate?>?,
                 authType: String?
             ) {
+                //client check
             }
         }
     }
