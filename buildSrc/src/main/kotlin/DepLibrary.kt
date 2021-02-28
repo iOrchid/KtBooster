@@ -1,14 +1,9 @@
 /**
+ * ----------------------------------------------------------------
  * 作者： 志威  zhiwei.org
  * 主页： Github: https://github.com/zhiwei1990
- * 日期： 2020年03月23日 11:12
+ * 日期： 2021年02月07日 11:12
  * 签名： 天行健，君子以自强不息；地势坤，君子以厚德载物。
- *      _              _           _     _   ____  _             _ _
- *     / \   _ __   __| |_ __ ___ (_) __| | / ___|| |_ _   _  __| (_) ___
- *    / _ \ | "_ \ / _` | "__/ _ \| |/ _` | \___ \| __| | | |/ _` | |/ _ \
- *   / ___ \| | | | (_| | | | (_) | | (_| |  ___) | |_| |_| | (_| | | (_) |
- *  /_/   \_\_| |_|\__,_|_|  \___/|_|\__,_| |____/ \__|\__,_|\__,_|_|\___/  -- 志威 zhiwei.org
- *
  * You never know what you can do until you try !
  * ----------------------------------------------------------------
  * kotlin dsl 配置构建依赖库的统一管理
@@ -17,39 +12,33 @@ object DepLibrary {
 
 
     //<editor-folder desc="平台基础配置库">
+
     const val KOTLIN_LIB_JDK = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     const val KOTLIN_LIB_REFLECT = "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     const val KOTLIN_LIB = "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    const val COROUTINES_CORE =
-        "org.jetbrains.kotlinx:kotlinx-coroutines-core:${VersionExt.coroutines}"
     const val COROUTINES_ANDROID =
         "org.jetbrains.kotlinx:kotlinx-coroutines-android:${VersionExt.coroutines}"
     const val APPCOMPAT = "androidx.appcompat:appcompat:${VersionExt.compat}"
-    const val COLLECTION = "androidx.collection:collection:${VersionExt.collection}"
     const val CORE_KTX = "androidx.core:core-ktx:${VersionExt.androidxCoreKtx}"
     const val FRAGMENT_KTX = "androidx.fragment:fragment-ktx:${VersionExt.fragmentKtx}"
     const val ACTIVITY_KTX = "androidx.activity:activity-ktx:${VersionExt.activityKtx}"
+
     const val COLLECTION_KTX = "androidx.collection:collection-ktx:${VersionExt.collection}"
     const val PALETTE_KTX = "androidx.palette:palette-ktx:${VersionExt.paletteKtx}"
     const val SQLITE_KTX = "androidx.sqlite:sqlite-ktx:${VersionExt.sqliteKtx}"
-    const val CONCURRENT = "androidx.concurrent:concurrent-futures:${VersionExt.concurrentFutures}"
     const val CONCURRENT_KTX =
         "androidx.concurrent:concurrent-futures-ktx:${VersionExt.concurrentFuturesKtx}"
-    const val MATERIAL = "com.google.android.material:material:${VersionExt.material}"
 
+    const val MATERIAL = "com.google.android.material:material:${VersionExt.material}"
     const val CONSTRAINT_LAYOUT =
         "androidx.constraintlayout:constraintlayout:${VersionExt.constraint}"
     const val RECYCLER_VIEW = "androidx.recyclerview:recyclerview:${VersionExt.recyclerView}"
+    const val VIEW_PAGE2 = "androidx.viewpager2:viewpager2:${VersionExt.viewPager2}"
 
     //<editor-folder desc="Jetpack配置Libs">
-    const val LIFECYCLE_LIVEDATA = "androidx.lifecycle:lifecycle-livedata:${VersionExt.lifecycle}"
 
+    const val STARTUP = "androidx.startup:startup-runtime:${VersionExt.startup}"
 
-    //</editor-folder>
-    const val LIFECYCLE_RX_STREAM_KTX =
-        "androidx.lifecycle:lifecycle-reactivestreams-ktx:${VersionExt.lifecycle}"
-    const val LIFECYCLE_VIEWMODEL = "androidx.lifecycle:lifecycle-viewmodel:${VersionExt.lifecycle}"
-    const val LIFECYCLE_RUNTIME = "androidx.lifecycle:lifecycle-runtime:${VersionExt.lifecycle}"
     const val LIFECYCLE_LIVEDATA_KTX =
         "androidx.lifecycle:lifecycle-livedata-ktx:${VersionExt.lifecycle}"
     const val LIFECYCLE_VIEWMODEL_KTX =
@@ -57,27 +46,19 @@ object DepLibrary {
     const val LIFECYCLE_COMMON_JAVA8 =
         "androidx.lifecycle:lifecycle-common-java8:${VersionExt.lifecycle}"//用于kapt
 
-    const val ROOM_RUNTIME = "androidx.room:room-runtime:${VersionExt.room}"
     const val ROOM_COMMON = "androidx.room:room-common:${VersionExt.room}"
     const val ROOM_KTX = "androidx.room:room-ktx:${VersionExt.room}"
     const val ROOM_COMPILER = "androidx.room:room-compiler:${VersionExt.room}"//用于kapt
 
-    const val PAGING_RUNTIME = "androidx.paging:paging-runtime:${VersionExt.paging}"
     const val PAGING_RUNTIME_KTX = "androidx.paging:paging-runtime-ktx:${VersionExt.paging}"
-    const val PAGING_COMMON = "androidx.paging:paging-common:${VersionExt.paging}"
     const val PAGING_COMMON_KTX = "androidx.paging:paging-common-ktx:${VersionExt.paging}"
 
-    const val WORK_RUNTIME = "androidx.work:work-runtime:${VersionExt.work}"
     const val WORK_RUNTIME_KTX = "androidx.work:work-runtime-ktx:${VersionExt.work}"
 
     //注意配置navigation版本号的时候，project下的build.gradle的class path也需要同步navigation的版本号配置
-    const val NAVIGATION_UI = "androidx.navigation:navigation-ui:$navigation"
+
     const val NAVIGATION_UI_KTX = "androidx.navigation:navigation-ui-ktx:$navigation"
-    const val NAVIGATION_FRAGMENT =
-        "androidx.navigation:navigation-fragment:$navigation"
-    const val NAVIGATION_FRAGMENT_KTX =
-        "androidx.navigation:navigation-fragment-ktx:$navigation"
-    const val NAVIGATION_RUNTIME = "androidx.navigation:navigation-runtime:$navigation"
+    const val NAVIGATION_FRAGMENT_KTX = "androidx.navigation:navigation-fragment-ktx:$navigation"
 
     //</editor-folder>
 
@@ -95,6 +76,22 @@ object DepLibrary {
 
     //腾讯开源key-value的高性能存储方案
     const val MMKV = "com.tencent:mmkv-static:${VersionExt.mmkv}"
+    const val COIL = "io.coil-kt:coil:${VersionExt.coil}"
+
+    const val UTIL_CODEX = "com.blankj:utilcodex:${VersionExt.utils}"
+    const val AGENT_WEB_CORE = "com.just.agentweb:agentweb-androidx:${VersionExt.agentWeb}"
+    const val AGENT_WEB_FILE = "com.just.agentweb:filechooser-androidx:${VersionExt.agentWeb}"
+    const val AGENT_WEB_DOWNLOADER =
+        "com.download.library:downloader-androidx:${VersionExt.agentWeb}"
+    const val LIVE_BUS = "com.jeremyliao:live-event-bus-x:${VersionExt.liveBus}"
+
+    const val BUGLY = "com.tencent.bugly:crashreport:${VersionExt.BUGLY}"
+
+    const val DOKIT = "com.didichuxing.doraemonkit:dokitx:${VersionExt.doKit}"
+    const val DOKIT_NO_OP = "com.didichuxing.doraemonkit:dokitx-no-op:${VersionExt.doKit}"
+    const val DIALOGS_CORE = "com.afollestad.material-dialogs:core:${VersionExt.dialogs}"
+    const val DIALOGS_INPUT = "com.afollestad.material-dialogs:input:${VersionExt.dialogs}"
+
     //</editor-folder>
 
 

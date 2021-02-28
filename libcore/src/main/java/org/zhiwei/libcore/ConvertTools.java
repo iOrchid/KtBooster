@@ -19,6 +19,7 @@ import java.util.regex.Pattern;
  * 转换相关的工具类，不便使用kotlin实现的代码，这里用java
  */
 class ConvertTools {
+
     private static final ConvertTools ourInstance = new ConvertTools();
 
     static ConvertTools getInstance() {

@@ -1,39 +1,45 @@
+import com.android.build.gradle.BaseExtension
+import com.android.build.gradle.LibraryExtension
+import com.android.build.gradle.internal.dsl.BaseAppModuleExtension
+import org.gradle.api.JavaVersion
+import org.gradle.api.Project
 import org.gradle.api.artifacts.Dependency
 import org.gradle.api.artifacts.dsl.DependencyHandler
+import org.gradle.kotlin.dsl.getByName
 
 /**
+ * ----------------------------------------------------------------
  * 作者： 志威  zhiwei.org
  * 主页： Github: https://github.com/zhiwei1990
- * 日期： 2020年03月23日 16:09
+ * 日期： 2021年02月07日 16:09
  * 签名： 天行健，君子以自强不息；地势坤，君子以厚德载物。
- *      _              _           _     _   ____  _             _ _
- *     / \   _ __   __| |_ __ ___ (_) __| | / ___|| |_ _   _  __| (_) ___
- *    / _ \ | '_ \ / _` | '__/ _ \| |/ _` | \___ \| __| | | |/ _` | |/ _ \
- *   / ___ \| | | | (_| | | | (_) | | (_| |  ___) | |_| |_| | (_| | | (_) |
- *  /_/   \_\_| |_|\__,_|_|  \___/|_|\__,_| |____/ \__|\__,_|\__,_|_|\___/  -- 志威 zhiwei.org
- *
  * You never know what you can do until you try !
  * ----------------------------------------------------------------
  * 依赖管理的相关扩展函数、
  */
 
+//region 扩展dependencies
 
 /**
  * 添加平台相关的基础依赖dependencies
  */
 fun DependencyHandler.addCoreDependencies() {
+
     implementation(DepLibrary.KOTLIN_LIB)
     implementation(DepLibrary.KOTLIN_LIB_JDK)
     implementation(DepLibrary.KOTLIN_LIB_REFLECT)
+    implementation(DepLibrary.COROUTINES_ANDROID)
+
     implementation(DepLibrary.APPCOMPAT)
     implementation(DepLibrary.CORE_KTX)
-    implementation(DepLibrary.COROUTINES_ANDROID)
-    implementation(DepLibrary.COROUTINES_CORE)
     implementation(DepLibrary.ACTIVITY_KTX)
     implementation(DepLibrary.FRAGMENT_KTX)
+
     implementation(DepLibrary.MATERIAL)
     implementation(DepLibrary.RECYCLER_VIEW)
     implementation(DepLibrary.CONSTRAINT_LAYOUT)
+    implementation(DepLibrary.VIEW_PAGE2)
+
 }
 
 
@@ -41,31 +47,23 @@ fun DependencyHandler.addCoreDependencies() {
  * 添加JetPack相关的依赖dependencies
  */
 fun DependencyHandler.addJetPackDependencies() {
+
     kapt(DepLibrary.LIFECYCLE_COMMON_JAVA8)
-    implementation(DepLibrary.LIFECYCLE_LIVEDATA)
     implementation(DepLibrary.LIFECYCLE_LIVEDATA_KTX)
-    implementation(DepLibrary.LIFECYCLE_RUNTIME)
-    implementation(DepLibrary.LIFECYCLE_VIEWMODEL)
     implementation(DepLibrary.LIFECYCLE_VIEWMODEL_KTX)
 
     implementation(DepLibrary.ROOM_COMMON)
     kapt(DepLibrary.ROOM_COMPILER)
     implementation(DepLibrary.ROOM_KTX)
-    implementation(DepLibrary.ROOM_RUNTIME)
 
-    implementation(DepLibrary.PAGING_COMMON)
     implementation(DepLibrary.PAGING_COMMON_KTX)
-    implementation(DepLibrary.PAGING_RUNTIME)
     implementation(DepLibrary.PAGING_RUNTIME_KTX)
 
-    implementation(DepLibrary.WORK_RUNTIME)
     implementation(DepLibrary.WORK_RUNTIME_KTX)
 
-    implementation(DepLibrary.NAVIGATION_FRAGMENT)
     implementation(DepLibrary.NAVIGATION_FRAGMENT_KTX)
-    implementation(DepLibrary.NAVIGATION_RUNTIME)
-    implementation(DepLibrary.NAVIGATION_UI)
     implementation(DepLibrary.NAVIGATION_UI_KTX)
+
 }
 
 /**
@@ -74,12 +72,23 @@ fun DependencyHandler.addJetPackDependencies() {
  */
 fun DependencyHandler.addGithubDependencies() {
 
+    implementation(DepLibrary.RETROFIT)
+    implementation(DepLibrary.RETROFIT_CONVERTER_GSON)
+    implementation(DepLibrary.GSON)
+
+    implementation(DepLibrary.OKHTTP)
+    implementation(DepLibrary.MMKV)
+    implementation(DepLibrary.COIL)
+//    implementation(DepLibrary.UTIL_CODEX)
+
+
 }
 
 /**
  * 添加test相关的依赖dependencies
  */
 fun DependencyHandler.addTestDependencies() {
+
     testImplementation(DepLibrary.JUNIT)
     androidTestImplementation(DepLibrary.JUNIT_KTX)
 
@@ -97,7 +106,7 @@ fun DependencyHandler.addTestDependencies() {
  * 参考 ImplementationConfigurationAccessors.kt、KaptConfigurationAccessors.kt、TestImplementationConfigurationAccessors.kt
  * 等等 gradle-kotlin-dsl-accessor中定义的
  */
-private fun DependencyHandler.implementation(dependencyNotation: Any): Dependency? =
+fun DependencyHandler.implementation(dependencyNotation: Any): Dependency? =
     add("implementation", dependencyNotation)
 
 private fun DependencyHandler.api(dependencyNotation: Any): Dependency? =
@@ -115,5 +124,71 @@ private fun DependencyHandler.testApi(dependencyNotation: Any): Dependency? =
 private fun DependencyHandler.androidTestImplementation(dependencyNotation: Any): Dependency? =
     add("androidTestImplementation", dependencyNotation)
 
+fun DependencyHandler.androidReleaseImplementation(dependencyNotation: Any): Dependency? =
+    add("androidReleaseImplementation", dependencyNotation)
+
 private fun DependencyHandler.androidTestApi(dependencyNotation: Any): Dependency? =
     add("androidTestApi", dependencyNotation)
+
+//endregion
+
+
+private fun Project.setupBaseModule(): BaseExtension {
+    return extensions.getByName<BaseExtension>("android").apply {
+        compileSdkVersion(compileSdkNum)
+        buildToolsVersion(buildToolsNum)
+
+        defaultConfig {
+            minSdkVersion(minSdkNum)
+            targetSdkVersion(targetSdkNum)
+
+            testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+            consumerProguardFiles("consumer-rules.pro")
+        }
+
+        compileOptions {
+            sourceCompatibility = JavaVersion.VERSION_1_8
+            targetCompatibility = JavaVersion.VERSION_1_8
+        }
+    }
+}
+
+fun Project.setupLibraryModule(block: LibraryExtension.() -> Unit = {}): LibraryExtension {
+    return (setupBaseModule() as LibraryExtension).apply {
+
+        libraryVariants.all {
+            generateBuildConfigProvider?.configure { enabled = false }
+        }
+
+        testOptions {
+            unitTests.isIncludeAndroidResources = true
+        }
+
+        buildFeatures {
+            dataBinding = true
+        }
+
+        block()
+    }
+}
+
+fun Project.setupAppModule(block: BaseAppModuleExtension.() -> Unit = {}): BaseAppModuleExtension {
+
+    return (setupBaseModule() as BaseAppModuleExtension).apply {
+        defaultConfig {
+
+            resConfigs("zh", "zh_CN", "CN")
+
+            vectorDrawables.useSupportLibrary = true
+
+            testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+            consumerProguardFiles("consumer-rules.pro")
+        }
+
+        buildFeatures {
+            dataBinding = true
+        }
+
+        block()
+    }
+}

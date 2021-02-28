@@ -1,1 +1,1 @@
-include(":sample", ":booster", ":libnet", ":libui", ":libcore")
+include(":sample", ":booster", ":libcore")

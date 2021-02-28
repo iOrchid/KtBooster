@@ -1,57 +1,62 @@
 plugins {
 	id("com.android.library")
-	kotlin("android")
-	kotlin("android.extensions")
-	kotlin("kapt")//使用dataBinding或 kotlin的注解功能时候，就需要这个
-	id("androidx.navigation.safeargs.kotlin")//androidx navigation传参插件 也可以不带.kotlin（该插件引起一个变异warn getApplicationIdTextResource的api废弃问题）
+	id("kotlin-android")
+	id("kotlin-kapt")
+	id("kotlin-parcelize")
+	id("androidx.navigation.safeargs.kotlin")
 	//2、发布到jitpack.io的步骤2,似乎所有依赖module都要配置
 	id("com.github.dcendents.android-maven")
 }
 
-android {
-	compileSdkVersion(compileSdkNum)
-	buildToolsVersion(buildToolsNum)
-
-	defaultConfig {
-		minSdkVersion(minSdkNum)
-		targetSdkVersion(targetSdkNum)
-		versionCode = libCode
-		versionName = libVersion
-
-		testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-		consumerProguardFiles("consumer-rules.pro")
-	}
-
-	buildTypes {
-		getByName("release") {
-			isMinifyEnabled = false
-			proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
-		}
-	}
-//AndroidStudio 4 以下使用这种方式配置dataBinding
-//    dataBinding {
-//        isEnabled = true
-//    }
-	//AS4 以上版本使用这个配置dataBinding
-	buildFeatures.dataBinding = true
-}
+setupLibraryModule()
 
 dependencies {
-	implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
-	api(project(mapOf("path" to ":libnet")))
-	api(project(mapOf("path" to ":libui")))
-	api(project(mapOf("path" to ":libcore")))
+	implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar", "*.aar"))))
+	implementation("org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version")
 
-	//region base dependencies
-	addCoreDependencies()
-	//endregion
+	api(project(":libcore"))
 
-	//<editor-folder desc="jetPack libs">
-	addJetPackDependencies()
-	//</editor-folder>
+	implementation(DepLibrary.KOTLIN_LIB)
+	implementation(DepLibrary.KOTLIN_LIB_JDK)
+	implementation(DepLibrary.KOTLIN_LIB_REFLECT)
+	implementation(DepLibrary.COROUTINES_ANDROID)
+
+	implementation(DepLibrary.APPCOMPAT)
+	implementation(DepLibrary.CORE_KTX)
+	implementation(DepLibrary.ACTIVITY_KTX)
+	implementation(DepLibrary.FRAGMENT_KTX)
+
+	//jetpack
+	kapt(DepLibrary.LIFECYCLE_COMMON_JAVA8)
+	implementation(DepLibrary.LIFECYCLE_LIVEDATA_KTX)
+	implementation(DepLibrary.LIFECYCLE_VIEWMODEL_KTX)
+
+	implementation(DepLibrary.ROOM_COMMON)
+	kapt(DepLibrary.ROOM_COMPILER)
+	implementation(DepLibrary.ROOM_KTX)
+
+	implementation(DepLibrary.PAGING_COMMON_KTX)
+	implementation(DepLibrary.PAGING_RUNTIME_KTX)
+
+	implementation(DepLibrary.WORK_RUNTIME_KTX)
+
+	implementation(DepLibrary.NAVIGATION_FRAGMENT_KTX)
+	implementation(DepLibrary.NAVIGATION_UI_KTX)
 
 
-	//<editor-folder desc="test libs">
-	addTestDependencies()
-	//</editor-folder>
+
+	implementation(DepLibrary.RETROFIT)
+	implementation(DepLibrary.RETROFIT_CONVERTER_GSON)
+	implementation(DepLibrary.GSON)
+
+	implementation(DepLibrary.OKHTTP)
+	implementation(DepLibrary.COIL)
+	implementation(DepLibrary.MMKV)
+
+	// 滴滴助手
+	debugImplementation(DepLibrary.DOKIT)
+	releaseImplementation(DepLibrary.DOKIT_NO_OP)
+
+	implementation(DepLibrary.DIALOGS_CORE)
+	implementation(DepLibrary.DIALOGS_INPUT)
 }

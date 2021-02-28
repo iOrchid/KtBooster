@@ -1,3 +1,4 @@
 <resources>
-
+    <string name="str_aide_title_server_host">切换Server Host</string>
+    <string name="str_aide_title_account">账号切换</string>
 </resources>
