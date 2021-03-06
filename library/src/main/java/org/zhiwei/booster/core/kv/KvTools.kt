@@ -2,7 +2,6 @@ package org.zhiwei.booster.core.kv
 
 import android.content.Context
 import com.tencent.mmkv.MMKV
-import org.zhiwei.libcore.kv.KvInterface
 
 /**
  * ----------------------------------------------------------------

@@ -82,10 +82,10 @@ dependencies {
 	implementation("io.coil-kt:coil:1.1.1")
 	implementation("com.tencent:mmkv-static:1.2.6")
 
-	implementation("com.didichuxing.doraemonkit:dokitx:3.3.5")
+	debugImplementation("com.didichuxing.doraemonkit:dokitx:3.3.5")
 	implementation("com.didichuxing.doraemonkit:dokitx-no-op:3.3.5")
-	implementation("com.afollestad.material-dialogs:core:3.3.0")
-	implementation("com.afollestad.material-dialogs:input:3.3.0")
+	debugImplementation("com.afollestad.material-dialogs:core:3.3.0")
+	debugImplementation("com.afollestad.material-dialogs:input:3.3.0")
 
 
 	testImplementation("junit:junit:4.13.2")
