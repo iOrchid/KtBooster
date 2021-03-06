@@ -3,6 +3,7 @@ package org.zhiwei.booster
 import android.app.Application
 import org.zhiwei.booster.dokit.AssistantApp
 import org.zhiwei.libcore.kv.KvTools
+import org.zhiwei.libcore.tools.LogTools
 import org.zhiwei.libcore.ui.application
 
 /**
@@ -21,13 +22,17 @@ abstract class BaseApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         KvTools.initKvTools(application)
-        AssistantApp.configKit(application, baseHost()) { observeHostChange(it) }
+        kotlin.runCatching {
+            AssistantApp.configKit(application, baseHost()) { observeHostChange(it) }
+        }.onFailure { e ->
+            LogTools.w("如需使用KtBooster的调试辅助工具，暂需额外依赖Dokit的配置 ${e.message}")
+        }
     }
 
     /**
      * 配置用于项目的baseHost，用于DoKit的配置切换
      */
-    abstract fun baseHost(): Map<String, String>
+    open fun baseHost(): Map<String, String> = emptyMap()
 
 
     open fun observeHostChange(url: String?) {
