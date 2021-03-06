@@ -82,3 +82,16 @@ dependencies {
 	androidTestImplementation("androidx.test.espresso:espresso-core:3.3.0")
 
 }
+afterEvaluate {
+	publishing {
+		publications {
+			// Creates a Maven publication called "release".
+			release(MavenPublication) {
+				from components.release
+				groupId = "com.github.zhiwei1990"
+				artifactId = 'ktbooster'
+				version = '0.2.6'
+			}
+		}
+	}
+}
