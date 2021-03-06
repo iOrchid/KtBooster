@@ -17,22 +17,19 @@ import org.zhiwei.booster.dokit.AssistantApp
  */
 abstract class BaseApplication : Application() {
 
+    //标记是否需要显示调试工具
+    protected abstract val showKit: Boolean
+
+    // 配置用于项目的baseHost，用于DoKit的配置切换
+    protected open val baseHost: Map<String, String> = emptyMap()
 
     override fun onCreate() {
         super.onCreate()
         KvTools.initKvTools(application)
-        if (showKit()) {
-            AssistantApp.configKit(application, baseHost()) { observeHostChange(it) }
+        if (showKit) {
+            AssistantApp.configKit(application, baseHost) { observeHostChange(it) }
         }
     }
-
-    open fun showKit() = false
-
-    /**
-     * 配置用于项目的baseHost，用于DoKit的配置切换
-     */
-    open fun baseHost(): Map<String, String> = emptyMap()
-
 
     open fun observeHostChange(url: String?) {
         //有需要感知项目baseUrl的变化的，在继承的Application中覆写此函数，来处理

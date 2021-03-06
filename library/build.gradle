@@ -8,25 +8,14 @@ plugins {
 	id("maven-publish")
 }
 
-repositories {
-	mavenCentral()
-	google()
-	jcenter()
-	maven { url = "https://jitpack.io" }
-}
-
-group = "com.github.zhiwei1990"
-version = "0.2.3"
-
-
 android {
 	compileSdkVersion 30
 
 	defaultConfig {
 		minSdkVersion 21
 		targetSdkVersion 30
-		versionCode 23
-		versionName "0.2.3"
+		versionCode 25
+		versionName "0.2.5"
 	}
 
 	buildTypes {
@@ -79,31 +68,17 @@ dependencies {
 	implementation("com.google.code.gson:gson:2.8.6")
 
 	//utils工具库
-	implementation("io.coil-kt:coil:1.1.1")
+	api("io.coil-kt:coil:1.1.1")
 	implementation("com.tencent:mmkv-static:1.2.6")
 
-	implementation("com.didichuxing.doraemonkit:dokitx:3.3.5")
+	api("com.didichuxing.doraemonkit:dokitx:3.3.5")
 //	releaseImplementation("com.didichuxing.doraemonkit:dokitx-no-op:3.3.5")
-	implementation("com.afollestad.material-dialogs:core:3.3.0")
-	implementation("com.afollestad.material-dialogs:input:3.3.0")
+	api("com.afollestad.material-dialogs:core:3.3.0")
+	api("com.afollestad.material-dialogs:input:3.3.0")
 
 
 	testImplementation("junit:junit:4.13.2")
 	androidTestImplementation("androidx.test.ext:junit:1.1.2")
 	androidTestImplementation("androidx.test.espresso:espresso-core:3.3.0")
 
-}
-
-afterEvaluate {
-	publishing {
-		publications {
-			// Creates a Maven publication called "release".
-			release(MavenPublication) {
-				from components.release
-				groupId = "com.github.zhiwei1990"
-				artifactId = 'ktbooster'
-				version = '0.2.3'
-			}
-		}
-	}
 }
