@@ -1,1 +1,1 @@
-include(":sample", ":booster", ":libcore")
+include(":library")
