@@ -1,7 +1,7 @@
 package org.zhiwei.booster.dokit
 
 import android.app.Application
-import com.didichuxing.doraemonkit.DoraemonKit
+import com.didichuxing.doraemonkit.DoKit
 import com.didichuxing.doraemonkit.kit.AbstractKit
 import org.zhiwei.booster.core.ui.StringParamUnit
 
@@ -26,6 +26,9 @@ internal object AssistantApp {
         hostCallback: StringParamUnit
     ) {
         val kits = arrayListOf<AbstractKit>(ServerKit(mapHost, hostCallback))
-        DoraemonKit.install(application, kits)
+        DoKit.Builder(application)
+            .productId("")
+            .customKits(kits)
+            .build()
     }
 }
