@@ -91,7 +91,7 @@ afterEvaluate {
 				from components.release
 				groupId = "com.github.zhiwei1990"
 				artifactId = 'ktbooster'
-				version = '0.2.6'
+				version = versionName
 			}
 		}
 	}
