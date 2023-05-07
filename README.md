@@ -1,9 +1,9 @@
 # 🚀KtBooster
 
 🚀🚀Kotlin语言构建的Android开发便捷库或架构(An android development efficiency multiplier using kotlin as a dependency library or architecture)
-[![jetpack](https://img.shields.io/badge/志威-KtBooster-brightgreen.svg)](https://github.com/zhiwei1990/KtBooster)[![apache2.0](https://img.shields.io/badge/license-apache2.0-brightgreen.svg)](./LICENSE) [![API](https://img.shields.io/badge/API-21%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=21) ![](https://img.shields.io/github/workflow/status/zhiwei1990/KtBooster/CI) ![GitHub repo size](https://img.shields.io/github/repo-size/zhiwei1990/KtBooster.svg?style=flat-square) ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/zhiwei1990/KtBooster) ![GitHub last commit](https://img.shields.io/github/last-commit/zhiwei1990/KtBooster.svg?style=flat-square) ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/zhiwei1990/KtBooster.svg?style=flat-square)![GitHub All Releases](https://img.shields.io/github/downloads/zhiwei1990/KtBooster/total) [![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fzhiwei1990%2FKtBooster&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=Hits&edge_flat=false)](https://github.com/zhiwei1990/KtBooster)
+[![jetpack](https://img.shields.io/badge/志威-KtBooster-brightgreen.svg)](https://github.com/iOrchid/KtBooster)[![apache2.0](https://img.shields.io/badge/license-apache2.0-brightgreen.svg)](./LICENSE) [![API](https://img.shields.io/badge/API-21%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=21) ![](https://img.shields.io/github/workflow/status/iOrchid/KtBooster/CI) ![GitHub repo size](https://img.shields.io/github/repo-size/iOrchid/KtBooster.svg?style=flat-square) ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/iOrchid/KtBooster) ![GitHub last commit](https://img.shields.io/github/last-commit/iOrchid/KtBooster.svg?style=flat-square) ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/iOrchid/KtBooster.svg?style=flat-square)![GitHub All Releases](https://img.shields.io/github/downloads/iOrchid/KtBooster/total) [![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2FiOrchid%2FKtBooster&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=Hits&edge_flat=false)](https://github.com/iOrchid/KtBooster)
 
-#### 一、项目简介[![jitpack](https://jitpack.io/v/zhiwei1990/KtBooster.svg)](https://jitpack.io/#zhiwei1990/KtBooster)![GitHub release (latest SemVer including pre-releases)](https://img.shields.io/github/v/release/zhiwei1990/KtBooster?include_prereleases)![GitHub Release Date](https://img.shields.io/github/release-date-pre/zhiwei1990/KtBooster.svg?color=orange&style=flat-square)
+#### 一、项目简介[![jitpack](https://jitpack.io/v/iOrchid/KtBooster.svg)](https://jitpack.io/#iOrchid/KtBooster)![GitHub release (latest SemVer including pre-releases)](https://img.shields.io/github/v/release/iOrchid/KtBooster?include_prereleases)![GitHub Release Date](https://img.shields.io/github/release-date-pre/iOrchid/KtBooster.svg?color=orange&style=flat-square)
 
 > **KtBooster**是一个`Android`开发快速启动的项目`依赖库`或者`框架`，使用`Kotlin`语言结合`Jetpack`组件，提供项目开发常用的各类工具、组件和便捷库。
 
@@ -35,7 +35,7 @@ repositories{
 }
 //app build.gradle
   dependencies{
-    implementation("com.github.zhiwei1990:KtBooster:$version")//$version
+    implementation("com.github.iOrchid:KtBooster:$version")//$version
   }
 ```
 
